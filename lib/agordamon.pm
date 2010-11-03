@@ -251,17 +251,17 @@ sub write_mongodb
 					servicedependencies contacts contactgroups timeperiods commands);
 	}
 
-
 	my $conn = MongoDB::Connection->new(host => $self->{db_host});
     my $db = $conn->agordamon;
 	my $table;
 	my %ids;
 	foreach my $type (@types)
 	{
-		$table = $db->$type;
-	    $ids{$type} = $table->batch_insert(\@{$self->{$type}}, {safe => 1}) || die($!);
-	use Data::Dumper;
-	print Dumper(@{$self->{$type}});
+		if ($self->{$type})
+		{
+			$table = $db->$type;	# check if object already exists.. possible with batch_insert?
+		    $ids{$type} = $table->batch_insert(\@{$self->{$type}}, {safe => 1}) || die($!);
+		}
 		
 	}
 	$table = $db->test;
