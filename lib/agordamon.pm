@@ -29,13 +29,13 @@ use agordamon::command;
 use agordamon::contactgroup;
 use agordamon::timeperiod;
 
-use agordamon::conffile;
+#use agordamon::conffile;
 
 use MongoDB;
 use MongoDB::OID;
 
 @EXPORT = qw(add_srv2host, add_host, del_host, update_config2db, create_nagios_config);
-@ISA = qw(agordamon::conffile);
+#@ISA = qw(agordamon::conffile);
 
 our $VERSION = "0.13";
 
@@ -84,91 +84,68 @@ sub get_contact()
 	my ($self) = @_;
 }
 
-# create host in data
-sub create_host($\%)
+sub create_object($\%)
 {
-	my ($self, %definition) = @_;
-	push(@{$self->{hosts}}, new agordamon::host(%definition));
-}
-
-sub create_hostgroup($\%)
-{
-	my ($self, %definition) = @_;
-	push(@{$self->{hostgroups}}, new agordamon::hostgroup(%definition));
-}
-
-sub create_hostescalation($\%)
-{
-	my ($self, %definition) = @_;
-	push(@{$self->{hostescalations}}, new agordamon::hostescalation(%definition));
-}
-
-sub create_hostextinfo($\%)
-{
-	my ($self, %definition) = @_;
-	push(@{$self->{hostextinfos}}, new agordamon::hostextinfo(%definition));
-}
-
-sub create_hostdependency($\%)
-{
-	my ($self, %definition) = @_;
-	push(@{$self->{hostdependencies}}, new agordamon::hostdependency(%definition));
-}
-
-sub create_service($\%)
-{
-	my ($self, %definition) = @_;
-	
-	push(@{$self->{services}}, new agordamon::service(%definition));
-}
-
-sub create_servicegroup($\%)
-{
-	my ($self, %definition) = @_;
-	
-	push(@{$self->{servicegroups}}, new agordamon::servicegroup(%definition));
-}
-
-sub create_contact($\%)
-{
-	my ($self, %definition) = @_;
-	push(@{$self->{contacts}}, new agordamon::contact(%definition));
-}
-
-sub create_contactgroup($\%)
-{
-	my ($self, %definition) = @_;
-	push(@{$self->{contactgroups}}, new agordamon::contactgroup(%definition));
-}
-
-sub create_serviceextinfo($\%)
-{
-	my ($self, %definition) = @_;
-	push(@{$self->{serviceextinfos}}, new agordamon::serviceextinfo(%definition));
-}
-
-sub create_serviceescalation($\%)
-{
-	my ($self, %definition) = @_;
-	push(@{$self->{serviceescalations}}, new agordamon::serviceescalation(%definition));
-}
-
-sub create_servicedependency($\%)
-{
-	my ($self, %definition) = @_;
-	push(@{$self->{servicedependencies}}, new agordamon::servicedependency(%definition));
-}
-
-sub create_command($\%)
-{
-	my ($self, %definition) = @_;
-	push(@{$self->{commands}}, new agordamon::command(%definition));
-}
-
-sub create_timeperiod($\%)
-{
-	my ($self, %definition) = @_;
-	push(@{$self->{timeperiods}}, new agordamon::timeperiod(%definition));
+	my ($self, $type, %definition) = @_;
+	if ($type eq "host")
+	{
+		return push(@{$self->{hosts}}, new agordamon::host(%definition));
+	}
+	elsif ($type eq "hostgroup")
+	{
+		return push(@{$self->{hostgroups}}, new agordamon::hostgroup(%definition));
+	}
+	elsif ($type eq "hostescalation")
+	{
+		return push(@{$self->{hostescalations}}, new agordamon::hostescalation(%definition));
+	}
+	elsif ($type eq "hostextinfo")
+	{
+		return push(@{$self->{hostextinfos}}, new agordamon::hostextinfo(%definition));
+	}
+	elsif ($type eq "hostdependency")
+	{
+		return push(@{$self->{hostdependencies}}, new agordamon::hostdependency(%definition));
+	}
+	elsif ($type eq "service")
+	{
+		return push(@{$self->{services}}, new agordamon::service(%definition));
+	}
+	elsif ($type eq "servicegroup")
+	{
+		return push(@{$self->{servicegroups}}, new agordamon::servicegroup(%definition));
+	}
+	elsif ($type eq "contact")
+	{
+		return push(@{$self->{contacts}}, new agordamon::contact(%definition));
+	}
+	elsif ($type eq "contactgroup")
+	{
+		return push(@{$self->{contactgroups}}, new agordamon::contactgroup(%definition));
+	}
+	elsif ($type eq "serviceextinfo")
+	{
+		return push(@{$self->{serviceextinfos}}, new agordamon::serviceextinfo(%definition));
+	}
+	elsif ($type eq "serviceescalation")
+	{
+		return push(@{$self->{serviceescalations}}, new agordamon::serviceescalation(%definition));
+	}
+	elsif ($type eq "servicedependency")
+	{
+		return push(@{$self->{servicedependencies}}, new agordamon::servicedependency(%definition));
+	}
+	elsif ($type eq "command")
+	{
+		return push(@{$self->{commands}}, new agordamon::command(%definition));
+	}
+	elsif ($type eq "timeperiod")
+	{
+		return push(@{$self->{timeperiods}}, new agordamon::timeperiod(%definition));
+	}
+	else {
+		return undef;
+	}
 }
 
 sub add_member2group()
@@ -240,6 +217,7 @@ sub create_config($)
 	return $config;
 }
 
+# ??
 sub load_from_files() # if searchstring empty get all
 {
 	my ($self, $type, $searchstring) = @_;
@@ -247,22 +225,11 @@ sub load_from_files() # if searchstring empty get all
 	
 } 
 
-sub load_from_db()
-{
-	my ($self, $type, $searchstring) = @_;
-
-}
-
 # delete host from db
 sub del_host($)
 {
 	my ($self, $hostname) = @_;
 	
-	my %configured_hosts = %{$self->{configured_hosts}};
-	my %configured_services = %{$self->{configured_services}};
-#FIXME TODO muss aus der DB geloescht werden, nicht nur aus dem hash	
-	delete $configured_hosts{$hostname};
-	delete $configured_services{$hostname};
 }
 
 # add host to db!
@@ -274,6 +241,33 @@ sub write_host($\%)
 
 }
 
+sub write_mongodb
+{
+	my ($self, @types) = @_;
+	if (@types eq "")
+	{
+		@types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
+					services servicegroups serviceescalations serviceextinfos 
+					servicedependencies contacts contactgroups timeperiods commands);
+	}
+
+
+	my $conn = MongoDB::Connection->new(host => $self->{db_host});
+    my $db = $conn->agordamon;
+	my $table;
+	my %ids;
+	foreach my $type (@types)
+	{
+		$table = $db->$type;
+	    $ids{$type} = $table->batch_insert(\@{$self->{$type}}, {safe => 1}) || die($!);
+	use Data::Dumper;
+	print Dumper(@{$self->{$type}});
+		
+	}
+	$table = $db->test;
+	$table->insert( {name => 'mongo', type => 'database' }, {safe => 1});
+
+}
 # sub read_from_db()
 # aus datenbank einlesen, objekte für host, contact, services, etc anlegen
 
