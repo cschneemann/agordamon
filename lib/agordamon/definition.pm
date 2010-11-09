@@ -70,6 +70,17 @@ sub get_field($)
 	}
 }
 
+sub get_fields($)
+{
+	my ($self) = @_;
+	my %return;
+	foreach my $field (get_valid_fields())
+	{
+		$return{$field} = get_field($field);
+	}
+	return %return;
+}
+
 sub get_valid_fields()
 {
 	my ($self, $field) = @_;
