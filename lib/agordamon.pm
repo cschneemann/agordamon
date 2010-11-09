@@ -84,6 +84,8 @@ sub get_contact()
 	my ($self) = @_;
 }
 
+# objekte doch in hash speichern? wie mit templates umgehen, wo z.B. hostname nicht gesetzt ist?
+
 sub create_object($\%)
 {
 	my ($self, $type, %definition) = @_;
