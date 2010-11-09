@@ -46,11 +46,11 @@ sub new {
 
 	my ( $pkg, %params) = @_;
 	my $self = {};
-	$self->{db_type} = $params{db_type};
+#	$self->{db_type} = $params{db_type};
 	$self->{db_host} = $params{db_host};
 	$self->{db_user} = $params{db_user};
 	$self->{db_pass} = $params{db_pass};
-
+	$self->{db_name} = $params{db_name};
 	bless $self, $pkg;
 	return $self;
 }
@@ -68,80 +68,77 @@ sub list_services()
 
 }
 
-sub get_host()
+sub get_object()
 {
-	my ($self) = @_;
-
+	my ($self, $type, $name) = @_;
+	
 }
 
-sub get_service()
+# function to check if value already exists in structure?
+sub does_exist($$)
 {
-	my ($self) = @_;
+	my ($self, $type, %name) = @_;
+#	connect to db
+#	query
+#	return 	
 }
-
-sub get_contact()
-{
-	my ($self) = @_;
-}
-
-# objekte doch in hash speichern? wie mit templates umgehen, wo z.B. hostname nicht gesetzt ist?
 
 sub create_object($\%)
 {
 	my ($self, $type, %definition) = @_;
-	if ($type eq "host")
+	if ($type eq "host" || $type eq "hosts")
 	{
 		return push(@{$self->{hosts}}, new agordamon::host(%definition));
 	}
-	elsif ($type eq "hostgroup")
+	elsif ($type eq "hostgroup" || $type eq "hostgroups")
 	{
 		return push(@{$self->{hostgroups}}, new agordamon::hostgroup(%definition));
 	}
-	elsif ($type eq "hostescalation")
+	elsif ($type eq "hostescalation" || $type eq "hostescalations")
 	{
 		return push(@{$self->{hostescalations}}, new agordamon::hostescalation(%definition));
 	}
-	elsif ($type eq "hostextinfo")
+	elsif ($type eq "hostextinfo" || $type eq "hostextinfos")
 	{
 		return push(@{$self->{hostextinfos}}, new agordamon::hostextinfo(%definition));
 	}
-	elsif ($type eq "hostdependency")
+	elsif ($type eq "hostdependency" || $type eq "hostdependencies")
 	{
 		return push(@{$self->{hostdependencies}}, new agordamon::hostdependency(%definition));
 	}
-	elsif ($type eq "service")
+	elsif ($type eq "service" || $type eq "services")
 	{
 		return push(@{$self->{services}}, new agordamon::service(%definition));
 	}
-	elsif ($type eq "servicegroup")
+	elsif ($type eq "servicegroup" || $type eq "servicegroups")
 	{
 		return push(@{$self->{servicegroups}}, new agordamon::servicegroup(%definition));
 	}
-	elsif ($type eq "contact")
+	elsif ($type eq "contact" || $type eq "contacts")
 	{
 		return push(@{$self->{contacts}}, new agordamon::contact(%definition));
 	}
-	elsif ($type eq "contactgroup")
+	elsif ($type eq "contactgroup" || $type eq "contactgroups")
 	{
 		return push(@{$self->{contactgroups}}, new agordamon::contactgroup(%definition));
 	}
-	elsif ($type eq "serviceextinfo")
+	elsif ($type eq "serviceextinfo" || $type eq "serviceextinfos")
 	{
 		return push(@{$self->{serviceextinfos}}, new agordamon::serviceextinfo(%definition));
 	}
-	elsif ($type eq "serviceescalation")
+	elsif ($type eq "serviceescalation" || $type eq "serviceescalations")
 	{
 		return push(@{$self->{serviceescalations}}, new agordamon::serviceescalation(%definition));
 	}
-	elsif ($type eq "servicedependency")
+	elsif ($type eq "servicedependency" || $type eq "servicedendencies")
 	{
 		return push(@{$self->{servicedependencies}}, new agordamon::servicedependency(%definition));
 	}
-	elsif ($type eq "command")
+	elsif ($type eq "command" || $type eq "commands")
 	{
 		return push(@{$self->{commands}}, new agordamon::command(%definition));
 	}
-	elsif ($type eq "timeperiod")
+	elsif ($type eq "timeperiod" || $type eq "timeperiods")
 	{
 		return push(@{$self->{timeperiods}}, new agordamon::timeperiod(%definition));
 	}
@@ -185,6 +182,7 @@ sub add_group2member()
 	}
 }
 
+# needed function?
 # function to change a field for definition
 sub change_field()
 {
@@ -208,6 +206,13 @@ sub create_config($)
 	my ($self, @types) = @_;
 	my $config = "";
 
+	if (@types eq "")
+	{
+		@types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
+					services servicegroups serviceescalations serviceextinfos 
+					servicedependencies contacts contactgroups timeperiods commands);
+	}
+
 	foreach my $type (@types)
 	{
 		foreach (@{$self->{$type}})
@@ -218,14 +223,6 @@ sub create_config($)
 
 	return $config;
 }
-
-# ??
-sub load_from_files() # if searchstring empty get all
-{
-	my ($self, $type, $searchstring) = @_;
-
-	
-} 
 
 # delete host from db
 sub del_host($)
@@ -239,8 +236,51 @@ sub write_host($\%)
 {
 	my ($self, %definition) = @_;
 	
-#	$self->{hosts}[] = new agordamon::host(%definition);
 
+}
+sub query_mongodb
+{
+	my ($self, $type, %query) = @_;
+	# if $query empty get all
+
+	my $conn = MongoDB::Connection->new(host => $self->{db_host});
+	my $db = $conn->agordamon23;
+	my $table = $db->$type;
+	
+	my $data;
+	my $key = keys %query;
+	$data = $table->find({$key => $query{$key}});
+	while (my $dat = $data->next)
+	{
+		$self->create_object($type, %{$dat});
+	}
+}
+
+sub get_mongodb
+{
+	my ($self, @types) = @_;
+	if (!defined(@types))
+	{
+		@types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
+					services servicegroups serviceescalations serviceextinfos 
+					servicedependencies contacts contactgroups timeperiods commands);
+	}
+	# if $query empty get all
+
+	my $conn = MongoDB::Connection->new(host => $self->{db_host});
+	my $db = $conn->agordamon23;
+	my $table;
+	
+	foreach my $type (@types)
+	{
+		my $data;
+		$table = $db->$type;
+		$data = $table->find;
+		while (my $dat = $data->next)
+		{
+			$self->create_object($type, %{$dat});
+		}
+	}
 }
 
 sub write_mongodb
@@ -254,7 +294,7 @@ sub write_mongodb
 	}
 
 	my $conn = MongoDB::Connection->new(host => $self->{db_host});
-    my $db = $conn->agordamon;
+    my $db = $conn->agordamon23;
 	my $table;
 	my %ids;
 	foreach my $type (@types)
@@ -270,7 +310,5 @@ sub write_mongodb
 	$table->insert( {name => 'mongo', type => 'database' }, {safe => 1});
 
 }
-# sub read_from_db()
-# aus datenbank einlesen, objekte für host, contact, services, etc anlegen
 
 
