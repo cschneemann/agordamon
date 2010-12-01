@@ -184,6 +184,7 @@ sub add_group2member()
 
 # needed function?
 # function to change a field for definition
+# mehr suchparameter ermöglichen, dass auch beim richtigen geändert wird
 sub change_field()
 {
 	my ($self, $type, $name, $field, $data) = @_;
@@ -225,35 +226,39 @@ sub create_config($)
 }
 
 # delete host from db
-sub del_host($)
+sub delete_object()
 {
-	my ($self, $hostname) = @_;
-	
-}
-
-# add host to db!
-sub write_host($\%)
-{
-	my ($self, %definition) = @_;
-	
 
 }
+
+sub exists_in_mongodb()
+{
+	my ($self, $type, $query) = @_;
+	if ( $self->query_mongodb($type, $query) )
+	{
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 sub query_mongodb
 {
-	my ($self, $type, %query) = @_;
+	my ($self, $type, $query) = @_;
 	# if $query empty get all
+	my @return;
 
 	my $conn = MongoDB::Connection->new(host => $self->{db_host});
-	my $db = $conn->agordamon23;
+	my $db = $conn->agordamon;
 	my $table = $db->$type;
 	
-	my $data;
-	my $key = keys %query;
-	$data = $table->find({$key => $query{$key}});
+	my $data = $table->find($query);
 	while (my $dat = $data->next)
 	{
-		$self->create_object($type, %{$dat});
+#		$self->create_object($type, %{$dat});
+		push(@return, $dat);
 	}
+	return @return;
 }
 
 sub get_mongodb
@@ -266,17 +271,11 @@ sub get_mongodb
 					servicedependencies contacts contactgroups timeperiods commands);
 	}
 	# if $query empty get all
-
-	my $conn = MongoDB::Connection->new(host => $self->{db_host});
-	my $db = $conn->agordamon23;
-	my $table;
 	
 	foreach my $type (@types)
 	{
-		my $data;
-		$table = $db->$type;
-		$data = $table->find;
-		while (my $dat = $data->next)
+		my @data = $self->query_mongodb($type, "" );
+		foreach my $dat (@data )
 		{
 			$self->create_object($type, %{$dat});
 		}
@@ -294,15 +293,25 @@ sub write_mongodb
 	}
 
 	my $conn = MongoDB::Connection->new(host => $self->{db_host});
-    my $db = $conn->agordamon23;
+    my $db = $conn->agordamon;
+#	$db->drop;
+
 	my $table;
 	my %ids;
 	foreach my $type (@types)
 	{
+		$table = $db->$type;	# check if object already exists.. possible with batch_insert?
 		if ($self->{$type})
 		{
-			$table = $db->$type;	# check if object already exists.. possible with batch_insert?
-		    $ids{$type} = $table->batch_insert(\@{$self->{$type}}, {safe => 1}) || die($!);
+			foreach my $obj (@{$self->{$type}} )
+			{
+				if ( $self->exists_in_mongodb($type, \%{$obj} ) == 0 ) 
+				{ 
+				    $ids{$type} = $table->insert(\%{$obj}, {safe => 1}) || die("write_mongodb(): ", $!);
+				} else { 
+					print "scohn drin!\n"; 
+				}
+			}
 		}
 		
 	}
