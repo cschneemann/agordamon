@@ -1,0 +1,68 @@
+
+
+
+use agordamon;
+
+my $objects = agordamon->new( db_host => $db_host,
+							db_user => $db_user, 
+							db_pass => $db_pass );
+
+
+functions that comes with agordamon:
+
+create_object($type, \%object_definition)
+
+"create_object()" creates an object of given type and definition in its internal datastructure.
+
+$type can be one of the following:
+- host
+- hostgroup
+- hostescalation
+- hostextinfo
+- hostdependency
+- service
+- servicegroup
+- serviceescalation
+- serviceextinfo
+- servicedependency
+- contact
+- contagtgroup
+- command
+- timeperiod
+
+\%definition can contain all possible definition parameters from Nagios(r)/Icinga, that are valid for that type.
+
+###
+
+add_member2group($type, $group, $member)
+
+"add_member2group()" adds the given member to given group
+
+$type can be host or service, dependent on that a host(group) or service(group) has to be given as group respectively member.
+
+###
+
+add_group2member($type, $group, $member)
+
+"add_group2member()" adds according to "add_member2group()" a group to a given member.
+
+###
+
+change_field($type, $name, $field, $data)
+
+Changes given field of object with given $name and $type into $data.
+
+$type can be the same as for create_object()
+$name has to be the name of the object that should be changed
+$field represent the objectparameter that should be changed to value of $data
+
+###
+
+create_config(@types)
+
+returns the config for given types, types can be a list of possible types as in create_object()
+
+
+
+
+
