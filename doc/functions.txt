@@ -4,8 +4,8 @@
 use agordamon;
 
 my $objects = agordamon->new( db_host => $db_host,
-							db_user => $db_user, 
-							db_pass => $db_pass );
+                              db_user => $db_user, 
+                              db_pass => $db_pass );
 
 
 functions that comes with agordamon:
@@ -31,6 +31,10 @@ $type can be one of the following:
 - timeperiod
 
 \%definition can contain all possible definition parameters from Nagios(r)/Icinga, that are valid for that type.
+
+The parameter "name" is also used internally to make the internal data structure easier. If it is not set it will be set
+automatically and the value given for the specific _name parameter is used. host_name if a host is created, for example.
+
 
 ###
 
