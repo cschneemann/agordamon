@@ -23,7 +23,7 @@ sub get_valid_fields()
 {   
     my ($self, $field) = @_;
 	my @valid_fields = qw(use name register host_name alias display_name address 
-						parents hostgroups 	check_command initial_state 
+						parents hostgroups check_command initial_state 
 						max_check_attempts check_interval retry_interval 
 						active_checks_enabled passive_checks_enabled check_period 
 						obsess_over_host check_freshness freshness_threshold 
