@@ -21,7 +21,7 @@ use warnings;
 sub get_valid_fields()
 {   
     my ($self, $field) = @_;
-	my @valid_fields = qw(command_name command_line);
+	my @valid_fields = qw(name command_name command_line);
 
     return @valid_fields;
 }
