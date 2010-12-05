@@ -38,6 +38,10 @@ sub new {
 			$self->{$param} = $params{$param};
 		}
 	}
+	if (! $self->{"name"} )
+	{
+		$self->{"name"} = $self->{$self->get_type()."_name"};
+	}
 	return $self;
 }
 
