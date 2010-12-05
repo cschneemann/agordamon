@@ -83,9 +83,27 @@ sub does_exist($$)
 #	return 	
 }
 
+sub get_counter_of() # returns counter where a element is in elementsarray
+{
+	my ($self, $type, $name) = @_;
+	if ($self->{$type} )
+	{
+		for ( my $i=0; $i < scalar(@{$self->{$type}}); $i++)
+		{
+			if ( $self->{$type}[$i]->{name} eq $name )
+			{
+				return $i;
+			}
+		}
+	} else {
+		return undef;
+	}
+}
+
 sub create_object($\%)
 {
 	my ($self, $type, %definition) = @_;
+	my $temp;
 	if ($type eq "host" || $type eq "hosts")
 	{
 		return push(@{$self->{hosts}}, new agordamon::host(%definition));
@@ -218,17 +236,23 @@ sub create_config($)
 	{
 		foreach (@{$self->{$type}})
 		{
-			$config = $config.$_->create_config($_->get_type());
+			$config = $config.$_->create_config($_->get_type()) if defined;
 		}
 	}
 
 	return $config;
 }
 
-# delete host from db
+# delete host from struct
+# delete also from db if db is configured
 sub delete_object()
 {
-
+	my ($self, $type, $name) = @_;
+	my $to_delete = $self->get_counter_of($type, $name);
+	if (defined($to_delete)	)
+	{
+		delete($self->{$type}[$to_delete]);
+	}
 }
 
 sub exists_in_mongodb()
@@ -264,7 +288,7 @@ sub query_mongodb
 sub get_mongodb
 {
 	my ($self, @types) = @_;
-	if (!defined(@types))
+	if (!@types)
 	{
 		@types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
 					services servicegroups serviceescalations serviceextinfos 
