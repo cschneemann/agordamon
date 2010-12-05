@@ -67,6 +67,12 @@ create_config(@types)
 returns the config for given types, types can be a list of possible types as in create_object()
 
 
+###
+
+delete_object($type, $name)
+
+Deletes object with given name from and $type (hosts, services, ...) from structure and database, if used.
+
 
 
 
