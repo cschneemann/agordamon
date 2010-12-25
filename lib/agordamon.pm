@@ -9,7 +9,6 @@
 
 
 ## TODO:
-# add *groups
 # make the internal data structure easier
 
 package agordamon;
@@ -28,11 +27,9 @@ use agordamon::contact;
 use agordamon::command;
 use agordamon::contactgroup;
 use agordamon::timeperiod;
+use agordamon::mongoDB;
 
 #use agordamon::conffile;
-
-use MongoDB;
-use MongoDB::OID;
 
 @EXPORT = qw(add_srv2host, add_host, del_host, update_config2db, create_nagios_config);
 #@ISA = qw(agordamon::conffile);
@@ -201,7 +198,6 @@ sub add_group2member()
 }
 
 # needed function?
-# function to change a field for definition
 # mehr suchparameter ermöglichen, dass auch beim richtigen geändert wird
 sub change_field()
 {
@@ -251,97 +247,9 @@ sub delete_object()
 	my $to_delete = $self->get_counter_of($type, $name);
 	if (defined($to_delete)	)
 	{
-		delete($self->{$type}[$to_delete]);
+		delete($self->{$type}[$to_delete]); # delete in array
 	}
-}
-
-sub exists_in_mongodb()
-{
-	my ($self, $type, $query) = @_;
-	if ( $self->query_mongodb($type, $query) )
-	{
-		return 1;
-	} else {
-		return 0;
-	}
-}
-
-sub query_mongodb
-{
-	my ($self, $type, $query) = @_;
-	# if $query empty get all
-	my @return;
-
-	my $conn = MongoDB::Connection->new(host => $self->{db_host});
-	my $db = $conn->agordamon;
-	my $table = $db->$type;
-	
-	my $data = $table->find($query);
-	while (my $dat = $data->next)
-	{
-#		$self->create_object($type, %{$dat});
-		push(@return, $dat);
-	}
-	return @return;
-}
-
-sub get_mongodb
-{
-	my ($self, @types) = @_;
-	if (!@types)
-	{
-		@types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
-					services servicegroups serviceescalations serviceextinfos 
-					servicedependencies contacts contactgroups timeperiods commands);
-	}
-	# if $query empty get all
-	
-	foreach my $type (@types)
-	{
-		my @data = $self->query_mongodb($type, "" );
-		foreach my $dat (@data )
-		{
-			$self->create_object($type, %{$dat});
-		}
-	}
-}
-
-sub write_mongodb
-{
-	my ($self, @types) = @_;
-	if (@types eq "")
-	{
-		@types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
-					services servicegroups serviceescalations serviceextinfos 
-					servicedependencies contacts contactgroups timeperiods commands);
-	}
-
-	my $conn = MongoDB::Connection->new(host => $self->{db_host});
-    my $db = $conn->agordamon;
-#	$db->drop;
-
-	my $table;
-	my %ids;
-	foreach my $type (@types)
-	{
-		$table = $db->$type;	# check if object already exists.. possible with batch_insert?
-		if ($self->{$type})
-		{
-			foreach my $obj (@{$self->{$type}} )
-			{
-				if ( $self->exists_in_mongodb($type, \%{$obj} ) == 0 ) 
-				{ 
-				    $ids{$type} = $table->insert(\%{$obj}, {safe => 1}) || die("write_mongodb(): ", $!);
-				} else { 
-					print "scohn drin!\n"; 
-				}
-			}
-		}
-		
-	}
-	$table = $db->test;
-	$table->insert( {name => 'mongo', type => 'database' }, {safe => 1});
-
+	delete_obj_from_mongodb($type, $name);
 }
 
 
