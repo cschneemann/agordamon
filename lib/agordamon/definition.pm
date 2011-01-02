@@ -78,9 +78,9 @@ sub get_fields($)
 {
 	my ($self) = @_;
 	my %return;
-	foreach my $field (get_valid_fields())
+	foreach my $field ($self->get_valid_fields())
 	{
-		$return{$field} = get_field($field);
+		$return{$field} = $self->get_field($field) if ( defined($self->get_field($field)));
 	}
 	return %return;
 }
