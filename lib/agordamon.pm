@@ -27,7 +27,6 @@ use agordamon::contact;
 use agordamon::command;
 use agordamon::contactgroup;
 use agordamon::timeperiod;
-use agordamon::mongoDB;
 
 #use agordamon::conffile;
 
@@ -43,11 +42,17 @@ sub new {
 
 	my ( $pkg, %params) = @_;
 	my $self = {};
-#	$self->{db_type} = $params{db_type};
-	$self->{db_host} = $params{db_host};
-	$self->{db_user} = $params{db_user};
-	$self->{db_pass} = $params{db_pass};
-	$self->{db_name} = $params{db_name};
+	#$self->{db_type} = $params{db_type};
+	if ($params{db_type} eq "mongodb") 
+	{
+		use agordamon::backend::mongoDB;
+		$self->{database} = agordamon::backend::mongoDB->new( db_host => $params{db_host}, db_user => $params{db_user}, db_pass => $params{db_pass}, db_name => $params{db_name} );
+	} 
+	if ( $params{db_type} eq "mysql")
+	{
+		use agordamon::backend::MySQL;
+		$self->{database} = new agordamon::backend::MySQL( db_host => $params{db_host}, db_user => $params{db_user}, db_pass => $params{db_pass}, db_name => $params{db_name} );
+	}
 	bless $self, $pkg;
 	return $self;
 }
@@ -249,7 +254,50 @@ sub delete_object()
 	{
 		delete($self->{$type}[$to_delete]); # delete in array
 	}
-	delete_obj_from_mongodb($type, $name);
+	$self->{database}->delete_obj_from_db($type, $name);
 }
 
+sub write_db()
+{
+	my ($self, @types ) = @_;
+	my %objs;
+    if (@types eq "")
+    {   
+        @types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
+                    services servicegroups serviceescalations serviceextinfos 
+                    servicedependencies contacts contactgroups timeperiods commands);
+    }
+	
+	foreach my $type (@types)
+	{
+		my @items;
+		foreach my $item (@{$self->{$type}})
+		{
+				my %item = $item->get_fields;
+				push(@items, \%item);
+		}
+		$self->{database}->write_db($type, @items);
+	}
 
+}
+
+sub load_from_db()
+{
+	my ($self, @types) = @_;
+	if (@types eq "")
+    {   
+        @types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
+                    services servicegroups serviceescalations serviceextinfos 
+                    servicedependencies contacts contactgroups timeperiods commands);
+    }
+
+	my %objects = $self->{database}->get_from_db(@types);
+
+	foreach my $type (keys %objects)
+	{
+		for my $item (@{$objects{$type}})
+		{
+			$self->create_object($type, %{$item});	
+		}
+	}
+}	
