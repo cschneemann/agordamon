@@ -33,6 +33,10 @@ sub new {
 	$self->{db_user} = $params{db_user};
 	$self->{db_pass} = $params{db_pass};
 	$self->{db_name} = $params{db_name};
+
+	$self->{connection} = MongoDB::Connection->new(host => $self->{db_host});
+	$self->{db} = $self->{connection}->agordamon;
+
 	bless $self, $pkg;
 	return $self;
 }
@@ -51,9 +55,7 @@ sub exists_in_db()
 sub delete_obj_from_db()
 {
 	my ($self, $type, $name) = @_;
-	my $conn = MongoDB::Connection->new(host => $self->{db_host});
-	my $db = $conn->agordamon;
-	my $table = $db->$type;
+	my $table = $self->{db}->$type;
 
 	$table->remove(name => $name);	
 
@@ -65,9 +67,7 @@ sub query_db
 	# if $query empty get all
 	my @return;
 
-	my $conn = MongoDB::Connection->new(host => $self->{db_host});
-	my $db = $conn->agordamon;
-	my $table = $db->$type;
+	my $table = $self->{db}->$type;
 	
 	my $data = $table->find($query);
 	while (my $dat = $data->next)
@@ -108,13 +108,9 @@ sub write_db
 {
 	my ($self, $type, @objs) = @_;
 
-	my $conn = MongoDB::Connection->new(host => $self->{db_host});
-	
-    my $db = $conn->agordamon;
-#	$db->drop;
 	my $table;
 	my %ids;
-	$table = $db->$type;	# check if object already exists.. possible with batch_insert?
+	$table = $self->{db}->$type;	# check if object already exists.. possible with batch_insert?
 	foreach my $obj (@objs)
 	{
 		if ( $self->exists_in_db($type, \%{$obj} ) == 0 ) 
