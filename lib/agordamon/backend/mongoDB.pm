@@ -16,7 +16,7 @@ package agordamon::backend::mongoDB;
 use MongoDB;
 use MongoDB::OID;
 
-@EXPORT = qw(exists_in_mongodb, delete_ob_from_mongodb, query_mongodb, get_mongodb, write_mongodb);
+@EXPORT = qw(exists_in_db, query_db, get_db, write_db);
 #@ISA = qw(agordamon::conffile);
 
 our $VERSION = "0.13";
@@ -43,7 +43,8 @@ sub new {
 
 sub exists_in_db()
 {
-	my ($self, $type, $query) = @_;
+	my ($self, $type, $name) = @_;
+	my $query = { name => $name };
 	if ( $self->query_db($type, $query) )
 	{
 		return 1;
@@ -54,11 +55,10 @@ sub exists_in_db()
 
 sub delete_obj_from_db()
 {
-	my ($self, $type, $name) = @_;
+	my ($self, $type, $query) = @_;
 	my $table = $self->{db}->$type;
 
-	$table->remove(name => $name);	
-
+	$table->remove($query);	
 }
 
 sub query_db
@@ -94,7 +94,6 @@ sub get_from_db
 	{
 		my @data = $self->query_db($type, "" );
 		foreach my $dat (@data )
-
 		{
 		#	$self->create_object($type, %{$dat});
 			push(@{$return{$type}}, $dat);
@@ -104,25 +103,37 @@ sub get_from_db
 	return %return;
 }
 
-sub write_db
+sub update_db
 {
 	my ($self, $type, @objs) = @_;
+
+}
+
+sub write_db
+{
+	my ($self, $type, $if_exists, @objs) = @_;
 
 	my $table;
 	my %ids;
 	$table = $self->{db}->$type;	# check if object already exists.. possible with batch_insert?
 	foreach my $obj (@objs)
 	{
-		if ( $self->exists_in_db($type, \%{$obj} ) == 0 ) 
-		{ 
+		if ( $self->exists_in_db($type, $obj->{name} ) == 0 ) 
+		{
+			print "writing: ",$obj->{name}, "\n"; 
 		    $ids{$type} = $table->insert(\%{$obj}, {safe => 1}) || print("write_mongodb(): ", $!);
 		} else { 
-			print "scohn drin!\n"; 
+	#		print "scohn drin!\n";
+			if ($if_exists =~ /^update$/)
+			{
+				#update entry, untouched values will be untouched!
+			} elsif ($if_exists =~ /^overwrite$/)
+			{
+				# overwrite entry (delete and write new one)
+				print "overwrite\n";
+			}
 		}
 	}
-		
-#	$table = $db->test;
-#	$table->insert( {name => 'mongo', type => 'database' }, {safe => 1}); #????
 }
 
 
