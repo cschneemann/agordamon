@@ -43,6 +43,7 @@ sub new {
 	my ( $pkg, %params) = @_;
 	my $self = {};
 	#$self->{db_type} = $params{db_type};
+	#TODO FIXME Fehlerbehandlung wenn Parameter fehlen
 	if ($params{db_type} eq "mongodb") 
 	{
 		use agordamon::backend::mongoDB;
@@ -53,6 +54,8 @@ sub new {
 		use agordamon::backend::MySQL;
 		$self->{database} = new agordamon::backend::MySQL( db_host => $params{db_host}, db_user => $params{db_user}, db_pass => $params{db_pass}, db_name => $params{db_name} );
 	}
+
+	$self->{if_exists} = "";
 	bless $self, $pkg;
 	return $self;
 }
@@ -64,6 +67,12 @@ sub del_host($);
 sub update_config2db($);
 sub create_nagios_config($);
 sub is_valid($$);
+
+sub set()
+{
+	my ($self, $field, $value ) = @_;
+	$self->{$field} = $value;
+}
 
 sub list_services()
 {
@@ -87,16 +96,34 @@ sub does_exist($$)
 
 sub get_counter_of() # returns counter where a element is in elementsarray
 {
-	my ($self, $type, $name) = @_;
+	my ($self, $type, $query) = @_;
+	my @return;
+	my ($searchfield, $name);
+
+	foreach my $key (keys %$query)
+	{
+		$searchfield = $key;
+		$name = $query->{$key};
+	}
+ #FIXME clean these if-causes
 	if ($self->{$type} )
 	{
 		for ( my $i=0; $i < scalar(@{$self->{$type}}); $i++)
 		{
-			if ( $self->{$type}[$i]->{name} eq $name )
+			if ( $self->{$type}[$i]->get_field($searchfield) )
 			{
-				return $i;
+print "type ", $type, " field: ",$searchfield, " inhalt ", $self->{$type}[$i]->get_field($searchfield), "\n";
+				if ( $self->{$type}[$i]->get_field($searchfield) eq $name )
+				{
+					push(@return, $i);
+				}
 			}
 		}
+	}
+
+	if ($#return > 0)
+	{
+		return @return;
 	} else {
 		return undef;
 	}
@@ -248,18 +275,26 @@ sub create_config($)
 # delete also from db if db is configured
 sub delete_object()
 {
-	my ($self, $type, $name) = @_;
-	my $to_delete = $self->get_counter_of($type, $name);
-	if (defined($to_delete)	)
-	{
-		delete($self->{$type}[$to_delete]); # delete in array
-	}
-	$self->{database}->delete_obj_from_db($type, $name);
+	my ($self, $type, $query) = @_;
+#FIXME aus den objekten löschen muss nochmal überdacht werden....
+#	my @to_delete = $self->get_counter_of($type, $query);
+#	if (@to_delete)	
+#	{
+# FIXME will not work! wenn das erste element gelöscht wird von splice rücken die anderen auf, die counter verändern sich und passen nicht mehr!
+#		foreach my $counter (@to_delete)
+#		{	
+#			if (defined($counter))
+#			{
+#				@{$self->{$type}} = splice(@{$self->{$type}}, $counter);
+#			}
+#		}
+#	}
+	$self->{database}->delete_obj_from_db($type, $query);
 }
 
 sub write_db()
 {
-	my ($self, @types ) = @_;
+	my ($self, @types) = @_;
 	my %objs;
     if (@types eq "")
     {   
@@ -273,10 +308,10 @@ sub write_db()
 		my @items;
 		foreach my $item (@{$self->{$type}})
 		{
-				my %item = $item->get_fields;
+				my %item = $item->get_fields if (defined $item);
 				push(@items, \%item);
 		}
-		$self->{database}->write_db($type, @items);
+		$self->{database}->write_db($type, $self->{if_exists}, @items, );
 	}
 
 }
