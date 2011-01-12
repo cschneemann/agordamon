@@ -112,7 +112,6 @@ sub get_counter_of() # returns counter where a element is in elementsarray
 		{
 			if ( $self->{$type}[$i]->get_field($searchfield) )
 			{
-print "type ", $type, " field: ",$searchfield, " inhalt ", $self->{$type}[$i]->get_field($searchfield), "\n";
 				if ( $self->{$type}[$i]->get_field($searchfield) eq $name )
 				{
 					push(@return, $i);
@@ -276,19 +275,16 @@ sub create_config($)
 sub delete_object()
 {
 	my ($self, $type, $query) = @_;
-#FIXME aus den objekten löschen muss nochmal überdacht werden....
-#	my @to_delete = $self->get_counter_of($type, $query);
-#	if (@to_delete)	
-#	{
-# FIXME will not work! wenn das erste element gelöscht wird von splice rücken die anderen auf, die counter verändern sich und passen nicht mehr!
-#		foreach my $counter (@to_delete)
-#		{	
-#			if (defined($counter))
-#			{
-#				@{$self->{$type}} = splice(@{$self->{$type}}, $counter);
-#			}
-#		}
-#	}
+	my @to_delete = $self->get_counter_of($type, $query);
+	if (@to_delete)	
+	{
+		@to_delete = sort {$b <=> $a} @to_delete if (scalar(@to_delete) > 1 );
+		foreach my $counter (@to_delete)
+		{	
+				$counter = 0 if (!defined($counter));# but why?
+				splice(@{$self->{$type}}, $counter);
+		}
+	}
 	$self->{database}->delete_obj_from_db($type, $query);
 }
 
