@@ -4,7 +4,6 @@ Manifest
 README
 lib/agordamon.pm
 lib/agordamon/command.pm
-lib/agordamon/configuration.pm
 lib/agordamon/contactgroup.pm
 lib/agordamon/contact.pm
 lib/agordamon/definition.pm
