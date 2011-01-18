@@ -38,9 +38,9 @@ sub new {
 			$self->{$param} = $params{$param};
 		}
 	}
-	if (! $self->{"name"} )
+	if (! $self->get_field("name") )
 	{
-		$self->{"name"} = $self->{$self->get_type()."_name"};
+		$self->{"name"} = $self->{$self->get_type()."_name"}; #TODO change to set_field()?
 	}
 	return $self;
 }
@@ -128,4 +128,5 @@ sub create_config($)
 	$config = $config."}\n\n";
 	return $config;	
 }
+
 
