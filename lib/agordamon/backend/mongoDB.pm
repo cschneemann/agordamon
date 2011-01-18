@@ -58,7 +58,9 @@ sub delete_obj_from_db()
 	my ($self, $type, $query) = @_;
 	my $table = $self->{db}->$type;
 
-	$table->remove($query);	
+	my $d = $table->remove($query, {safe => 1});	
+	return $d;
+	
 }
 
 sub query_db
@@ -108,6 +110,37 @@ sub update_db
 	my ($self, $type, @objs) = @_;
 
 }
+sub update_entry
+{
+	my ($self, $type, $obj) = @_;
+	my $table;
+	$table = $self->{db}->$type;
+	my $criteria = { name => $obj->{name} };
+	my $r = $table->update($criteria, $obj, { safe => 1});
+	return $r;
+}
+
+sub overwrite_entry
+{
+	my ($self, $type, $obj) =@_;
+	my $table;
+	$table = $self->{db}->$type; 
+	my $name = $obj->{name};
+	my $query = { name => $name };
+	my $r = $self->delete_obj_from_db($type, $query);
+
+	$self->insert_entry($type, $obj) if $r;
+
+}
+sub insert_entry
+{
+	my ($self, $type, $obj) = @_;
+	my $table;
+	my %ids; #what to do with this? into log?
+	$table = $self->{db}->$type; 
+    $ids{$type} = $table->insert(\%{$obj}, {safe => 1}) || print("write_mongodb(): ", $!);
+# TODO errorhandling
+}
 
 sub write_db
 {
@@ -120,20 +153,20 @@ sub write_db
 	{
 		if ( $self->exists_in_db($type, $obj->{name} ) == 0 ) 
 		{
-			print "writing: ",$obj->{name}, "\n"; 
-		    $ids{$type} = $table->insert(\%{$obj}, {safe => 1}) || print("write_mongodb(): ", $!);
+			$self->insert_entry($type, $obj);
 		} else { 
-	#		print "scohn drin!\n";
 			if ($if_exists =~ /^update$/)
 			{
 				#update entry, untouched values will be untouched!
+				$self->update_entry($type, $obj);
 			} elsif ($if_exists =~ /^overwrite$/)
 			{
 				# overwrite entry (delete and write new one)
-				print "overwrite\n";
+				$self->overwrite_entry($type, $obj);
 			}
 		}
 	}
+	# FIXME TODO zurückgeben was geschrieben wurde, was nicht, was vorhanden war....
 }
 
 
