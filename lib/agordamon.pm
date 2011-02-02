@@ -331,4 +331,80 @@ sub load_from_db()
 			$self->create_object($type, %{$item});	
 		}
 	}
-}	
+}
+
+sub load_from_cfg()
+{
+	my ($self, $file) = @_;
+	my (@cfg_files, @cfg_dirs);
+
+	open(CFG, "<$file") or return -1;
+	while (<CFG>)
+	{
+		next if /#\s*/;
+		if (/cfg_file=(.+)$/ )
+		{
+			push (@cfg_files, $1);
+		} elsif (/cfg_dir=(.+)$/ ) {
+			push (@cfg_dirs, $1);
+		}
+	}	
+	close (CFG);
+
+	foreach my $cfg_dir (@cfg_dirs)
+	{
+		opendir(my $dir, $cfg_dir) or return -1;
+		while ( readdir($dir) )
+		{
+			if (/\.cfg$/)
+			{
+				push(@cfg_files, $_);
+			}
+		}
+	}
+
+	# now read/parse the configfiles...
+	foreach my $file (@cfg_files)
+	{
+		open (FILE, "<$file") or return -1;
+		my @file = <FILE>;
+		for (my $i=0; $i < scalar(@file); $i++)
+		{
+			my $definition = 0;
+			my $type = "";
+			my %object;
+
+			if ($file[$i] =~/define\s(\w+)\s*{/)
+			{
+				$type = $1;
+				$definition = 1;
+				$i++;
+			}
+
+			while ($definition)
+			{
+				
+				if ($file[$i] =~ /\s*(\w+)\s+(.+)$/ )
+				{
+					my $key = $1, 
+					my $value = $2;
+					($value) = (split(";", $value))[0];
+					$object{$key} = $value;
+#					print "key: $key value: $object{$key}\n";
+				}
+
+				if ($file[$i] =~ /}/)
+				{
+					$definition = 0;
+				}
+				$i++;
+			}
+			$self->create_object($type, %object);
+			$i++;
+		}
+
+	}
+
+}
+
+	
