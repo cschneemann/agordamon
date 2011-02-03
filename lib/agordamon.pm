@@ -252,7 +252,7 @@ sub create_config($)
 	my ($self, @types) = @_;
 	my $config = "";
 
-	if (@types eq "")
+	if (!@types )
 	{
 		@types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
 					services servicegroups serviceescalations serviceextinfos 
@@ -315,7 +315,7 @@ sub write_db()
 sub load_from_db()
 {
 	my ($self, @types) = @_;
-	if (@types eq "")
+	if (!@types) 
     {   
         @types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
                     services servicegroups serviceescalations serviceextinfos 
@@ -333,7 +333,7 @@ sub load_from_db()
 	}
 }
 
-sub load_from_cfg()
+sub load_from_cfg($)
 {
 	my ($self, $file) = @_;
 	my (@cfg_files, @cfg_dirs);
