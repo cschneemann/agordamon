@@ -4,12 +4,7 @@
 ## copyright: B1 Systems GmbH <info@b1-systems.de>, 2010.
 ## license: GPLv3+, http://www.gnu.org/licenses/gpl-3.0.html
 ## author: Christian Schneemann <schneemann@b1-systems.de>, 2010.
-## version: 0.1: create definitions for hosts, services, contacts. 20100810.
-## version: 0.2: give complete nagios definition to hostcreation. 20100807.
 
-
-## TODO:
-# make the internal data structure easier
 
 package agordamon::backend::mongoDB;
 
