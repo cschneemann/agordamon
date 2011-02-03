@@ -16,7 +16,7 @@ package agordamon::backend::mongoDB;
 use MongoDB;
 use MongoDB::OID;
 
-@EXPORT = qw(exists_in_db, query_db, get_db, write_db);
+@EXPORT = qw(_exists, query_db, get, write_db);
 #@ISA = qw(agordamon::conffile);
 
 our $VERSION = "0.13";
@@ -41,11 +41,11 @@ sub new {
 	return $self;
 }
 
-sub exists_in_db()
+sub _exists()
 {
 	my ($self, $type, $name) = @_;
 	my $query = { name => $name };
-	if ( $self->query_db($type, $query) )
+	if ( $self->query_db($type, $query) ) # .count? mit rueckgabe der anzahl, extra fehler wenn größer 1!
 	{
 		return 1;
 	} else {
@@ -151,7 +151,7 @@ sub write_db
 	$table = $self->{db}->$type;	# check if object already exists.. possible with batch_insert?
 	foreach my $obj (@objs)
 	{
-		if ( $self->exists_in_db($type, $obj->{name} ) == 0 ) 
+		if ( $self->_exists($type, $obj->{name} ) == 0 ) 
 		{
 			$self->insert_entry($type, $obj);
 		} else { 
