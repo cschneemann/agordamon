@@ -42,7 +42,7 @@ sub new {
 
 	my ( $pkg, %params) = @_;
 	my $self = {};
-	#$self->{db_type} = $params{db_type};
+	$self->{db_type} = $params{db_type};
 	#TODO FIXME Fehlerbehandlung wenn Parameter fehlen
 	if ($params{db_type} eq "mongodb") 
 	{
@@ -53,6 +53,11 @@ sub new {
 	{
 		use agordamon::backend::MySQL;
 		$self->{database} = new agordamon::backend::MySQL( db_host => $params{db_host}, db_user => $params{db_user}, db_pass => $params{db_pass}, db_name => $params{db_name} );
+	}
+	if ( $params{db_type} eq "files")
+	{
+		use agordamon::backend::Files;
+		$self->{database} = new agordamon::backend::Files( nagios_cfg =>$params{nagios_cfg} );
 	}
 
 	$self->{if_exists} = "";
@@ -132,61 +137,61 @@ sub create_object($\%)
 {
 	my ($self, $type, %definition) = @_;
 	my $temp;
-	if ($type eq "host" || $type eq "hosts")
+	if ($type eq "host" )
 	{
-		return push(@{$self->{hosts}}, new agordamon::host(%definition));
+		return push(@{$self->{host}}, new agordamon::host(%definition));
 	}
-	elsif ($type eq "hostgroup" || $type eq "hostgroups")
+	elsif ($type eq "hostgroup" )
 	{
-		return push(@{$self->{hostgroups}}, new agordamon::hostgroup(%definition));
+		return push(@{$self->{hostgroup}}, new agordamon::hostgroup(%definition));
 	}
-	elsif ($type eq "hostescalation" || $type eq "hostescalations")
+	elsif ($type eq "hostescalation" )
 	{
-		return push(@{$self->{hostescalations}}, new agordamon::hostescalation(%definition));
+		return push(@{$self->{hostescalation}}, new agordamon::hostescalation(%definition));
 	}
-	elsif ($type eq "hostextinfo" || $type eq "hostextinfos")
+	elsif ($type eq "hostextinfo" )
 	{
-		return push(@{$self->{hostextinfos}}, new agordamon::hostextinfo(%definition));
+		return push(@{$self->{hostextinfo}}, new agordamon::hostextinfo(%definition));
 	}
-	elsif ($type eq "hostdependency" || $type eq "hostdependencies")
+	elsif ($type eq "hostdependency" )
 	{
-		return push(@{$self->{hostdependencies}}, new agordamon::hostdependency(%definition));
+		return push(@{$self->{hostdependency}}, new agordamon::hostdependency(%definition));
 	}
-	elsif ($type eq "service" || $type eq "services")
+	elsif ($type eq "service" )
 	{
-		return push(@{$self->{services}}, new agordamon::service(%definition));
+		return push(@{$self->{service}}, new agordamon::service(%definition));
 	}
-	elsif ($type eq "servicegroup" || $type eq "servicegroups")
+	elsif ($type eq "servicegroup" )
 	{
-		return push(@{$self->{servicegroups}}, new agordamon::servicegroup(%definition));
+		return push(@{$self->{servicegroup}}, new agordamon::servicegroup(%definition));
 	}
-	elsif ($type eq "contact" || $type eq "contacts")
+	elsif ($type eq "contact" )
 	{
-		return push(@{$self->{contacts}}, new agordamon::contact(%definition));
+		return push(@{$self->{contact}}, new agordamon::contact(%definition));
 	}
-	elsif ($type eq "contactgroup" || $type eq "contactgroups")
+	elsif ($type eq "contactgroup" )
 	{
-		return push(@{$self->{contactgroups}}, new agordamon::contactgroup(%definition));
+		return push(@{$self->{contactgroup}}, new agordamon::contactgroup(%definition));
 	}
-	elsif ($type eq "serviceextinfo" || $type eq "serviceextinfos")
+	elsif ($type eq "serviceextinfo" )
 	{
-		return push(@{$self->{serviceextinfos}}, new agordamon::serviceextinfo(%definition));
+		return push(@{$self->{serviceextinfo}}, new agordamon::serviceextinfo(%definition));
 	}
-	elsif ($type eq "serviceescalation" || $type eq "serviceescalations")
+	elsif ($type eq "serviceescalation" )
 	{
-		return push(@{$self->{serviceescalations}}, new agordamon::serviceescalation(%definition));
+		return push(@{$self->{serviceescalation}}, new agordamon::serviceescalation(%definition));
 	}
-	elsif ($type eq "servicedependency" || $type eq "servicedendencies")
+	elsif ($type eq "servicedependency")
 	{
-		return push(@{$self->{servicedependencies}}, new agordamon::servicedependency(%definition));
+		return push(@{$self->{servicedependency}}, new agordamon::servicedependency(%definition));
 	}
-	elsif ($type eq "command" || $type eq "commands")
+	elsif ($type eq "command")
 	{
-		return push(@{$self->{commands}}, new agordamon::command(%definition));
+		return push(@{$self->{command}}, new agordamon::command(%definition));
 	}
-	elsif ($type eq "timeperiod" || $type eq "timeperiods")
+	elsif ($type eq "timeperiod")
 	{
-		return push(@{$self->{timeperiods}}, new agordamon::timeperiod(%definition));
+		return push(@{$self->{timeperiod}}, new agordamon::timeperiod(%definition));
 	}
 	else {
 		return undef;
@@ -254,9 +259,9 @@ sub create_config($)
 
 	if (!@types )
 	{
-		@types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
-					services servicegroups serviceescalations serviceextinfos 
-					servicedependencies contacts contactgroups timeperiods commands);
+		@types = qw( host hostgroup hostescalation hostextinfo hostdependency 
+					service servicegroup serviceescalation serviceextinfo 
+					servicedependency contact contactgroup timeperiod command);
 	}
 
 	foreach my $type (@types)
@@ -294,9 +299,9 @@ sub write_db()
 	my %objs;
     if (@types eq "")
     {   
-        @types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
-                    services servicegroups serviceescalations serviceextinfos 
-                    servicedependencies contacts contactgroups timeperiods commands);
+        @types = qw( host hostgroup hostescalation hostextinfo hostdependency 
+                    service servicegroup serviceescalation serviceextinfo 
+                    servicedependency contact contactgroup timeperiod command);
     }
 	
 	foreach my $type (@types)
@@ -317,12 +322,12 @@ sub load_from_db()
 	my ($self, @types) = @_;
 	if (!@types) 
     {   
-        @types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
-                    services servicegroups serviceescalations serviceextinfos 
-                    servicedependencies contacts contactgroups timeperiods commands);
+        @types = qw( host hostgroup hostescalation hostextinfo hostdependency 
+                    service servicegroup serviceescalation serviceextinfo 
+                    servicedependency contact contactgroup timeperiod command);
     }
-
-	my %objects = $self->{database}->get_from_db(@types);
+	
+	my %objects = $self->{database}->get(@types);
 
 	foreach my $type (keys %objects)
 	{
@@ -333,78 +338,3 @@ sub load_from_db()
 	}
 }
 
-sub load_from_cfg($)
-{
-	my ($self, $file) = @_;
-	my (@cfg_files, @cfg_dirs);
-
-	open(CFG, "<$file") or return -1;
-	while (<CFG>)
-	{
-		next if /#\s*/;
-		if (/cfg_file=(.+)$/ )
-		{
-			push (@cfg_files, $1);
-		} elsif (/cfg_dir=(.+)$/ ) {
-			push (@cfg_dirs, $1);
-		}
-	}	
-	close (CFG);
-
-	foreach my $cfg_dir (@cfg_dirs)
-	{
-		opendir(my $dir, $cfg_dir) or return -1;
-		while ( readdir($dir) )
-		{
-			if (/\.cfg$/)
-			{
-				push(@cfg_files, $_);
-			}
-		}
-	}
-
-	# now read/parse the configfiles...
-	foreach my $file (@cfg_files)
-	{
-		open (FILE, "<$file") or return -1;
-		my @file = <FILE>;
-		for (my $i=0; $i < scalar(@file); $i++)
-		{
-			my $definition = 0;
-			my $type = "";
-			my %object;
-
-			if ($file[$i] =~/define\s(\w+)\s*{/)
-			{
-				$type = $1;
-				$definition = 1;
-				$i++;
-			}
-
-			while ($definition)
-			{
-				
-				if ($file[$i] =~ /\s*(\w+)\s+(.+)$/ )
-				{
-					my $key = $1, 
-					my $value = $2;
-					($value) = (split(";", $value))[0];
-					$object{$key} = $value;
-#					print "key: $key value: $object{$key}\n";
-				}
-
-				if ($file[$i] =~ /}/)
-				{
-					$definition = 0;
-				}
-				$i++;
-			}
-			$self->create_object($type, %object);
-			$i++;
-		}
-
-	}
-
-}
-
-	
