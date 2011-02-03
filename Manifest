@@ -21,6 +21,7 @@ lib/agordamon/servicegroup.pm
 lib/agordamon/service.pm
 lib/agordamon/timeperiod.pm
 lib/agordamon/backend/mongoDB.pm
+lib/agordamon/backend/Files.pm
 lib/agordamon/backend/MySQL.pm
 lib/agordamon/management/
 
