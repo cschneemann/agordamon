@@ -26,9 +26,9 @@ sub get_valid_fields()
 				service_notifications_enabled host_notification_period 
 				service_notification_period host_notification_options 
 				service_notification_options service_notification_commands 
-				email pager can_submit_commands retain_status_information 
-				retain_nonstatus_information address1 address2 address3 address4
-				address5 address6);
+				host_notification_commands email pager can_submit_commands 
+				retain_status_information retain_nonstatus_information 
+				address1 address2 address3 address4	address5 address6);
 
     return @valid_fields;
 }
