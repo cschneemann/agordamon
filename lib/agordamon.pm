@@ -79,16 +79,20 @@ sub set()
 	$self->{$field} = $value;
 }
 
-sub list_services()
+sub list_objects($$$)
 {
+	my ($self, $type, $field, $value) = @_;
+
+	# TODO test if $field is valid
+	return grep { if ($_->{$field} ) { $_->{$field} =~ m/$value/ } } @{$self->{$type}};
 
 }
 
-sub get_object()
-{
-	my ($self, $type, $name) = @_;
-	
-}
+#sub get_object()
+#{
+#	my ($self, $type, $name) = @_;
+#	
+#}
 
 # function to check if value already exists in structure?
 sub does_exist($$)
@@ -275,8 +279,14 @@ sub create_config($)
 	return $config;
 }
 
+# TODO how to delete a service? from hostconfig?
+sub delete_srv() # host, service übergeben
+{
+
+}
 # delete host from struct
 # delete also from db if db is configured
+# delete more than only host!
 sub delete_object()
 {
 	my ($self, $type, $query) = @_;
@@ -320,7 +330,7 @@ sub write_db()
 sub load_from_db()
 {
 	my ($self, @types) = @_;
-	if (!@types) 
+	if (!@types) #FIXME why does this not work here?! 
     {   
         @types = qw( host hostgroup hostescalation hostextinfo hostdependency 
                     service servicegroup serviceescalation serviceextinfo 
