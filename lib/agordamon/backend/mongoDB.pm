@@ -75,14 +75,14 @@ sub query_db
 	return @return;
 }
 
-sub get_from_db
+sub get_from_db # FIXME rename to get_all_from_db
 {
 	my ($self, @types) = @_;
 	if (!@types)
 	{
-		@types = qw( hosts hostgroups hostescalations hostextinfos hostdependencies 
-					services servicegroups serviceescalations serviceextinfos 
-					servicedependencies contacts contactgroups timeperiods commands);
+		@types = qw( host hostgroup hostescalation hostextinfo hostdependency 
+					service servicegroup serviceescalation serviceextinfo 
+					servicedependency contact contactgroup timeperiod command);
 	}
 	# if $query empty get all
 #TODO alles per return zurückgeben	
@@ -111,7 +111,7 @@ sub update_entry
 	my $table;
 	$table = $self->{db}->$type;
 	my $criteria = { name => $obj->{name} };
-	my $r = $table->update($criteria, $obj, { safe => 1});
+	my $r = $table->update($criteria, { '$set' => $obj }, { safe => 1});
 	return $r;
 }
 
