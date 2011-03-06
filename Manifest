@@ -24,4 +24,5 @@ lib/agordamon/backend/mongoDB.pm
 lib/agordamon/backend/Files.pm
 lib/agordamon/backend/MySQL.pm
 lib/agordamon/management/
+lib/agordamon/4web.pm
 
