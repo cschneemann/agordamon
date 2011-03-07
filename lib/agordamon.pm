@@ -88,11 +88,6 @@ sub list_objects($$$)
 
 }
 
-#sub get_object()
-#{
-#	my ($self, $type, $name) = @_;
-#	
-#}
 
 # function to check if value already exists in structure?
 sub does_exist($$)
@@ -136,6 +131,13 @@ sub get_counter_of() # returns counter where a element is in elementsarray
 		return undef;
 	}
 }
+
+#sub get_object {
+#	my ($self, $type, $query) = @_;
+#	my %obj = $self->{$type}	
+#    return grep { if ($_->{$field} ) { $_->{$field} =~ m/$value/ } } @{$self->{$type}};
+#
+#}
 
 sub create_object($\%)
 {
@@ -207,7 +209,7 @@ sub add_member2group()
 	my ($self, $type, $group, $member) = @_;
 	if ($type eq "hostgroup" || $type eq "servicegroup")
 	{
-		foreach (@{$self->{$type."s"}}) #FIXME find a better way for doing this, works but looks strange...
+		foreach (@{$self->{$type}}) #FIXME find a better way for doing this, works but looks strange...
 		{
 			if ($_->get_field($type."_name") eq $group)
 			{
@@ -223,7 +225,7 @@ sub add_group2member()
 	my ($self, $type, $host, $group) = @_;
 	if ($type eq "host" || $type eq "service")
 	{
-		foreach (@{$self->{$type."s"}}) #FIXME find a better way for doing this, works but looks strange...
+		foreach (@{$self->{$type}}) #FIXME find a better way for doing this, works but looks strange...
 		{
 			if (defined($_->get_field($type."_name")))
 			{
@@ -243,7 +245,7 @@ sub change_field()
 {
 	my ($self, $type, $name, $field, $data) = @_;
 	
-	foreach (@{$self->{$type."s"}})
+	foreach (@{$self->{$type}})
 	{
 		if (defined($_->get_field($type."_name")))
 		{
@@ -287,6 +289,7 @@ sub delete_srv() # host, service übergeben
 # delete host from struct
 # delete also from db if db is configured
 # delete more than only host!
+# TODO use map for this too?!
 sub delete_object()
 {
 	my ($self, $type, $query) = @_;
@@ -327,6 +330,19 @@ sub write_db()
 
 }
 
+sub load_object_from_db()
+{
+    my ($self, $type, $query) = @_;
+
+	my @return = $self->{database}->query_db($type, $query);
+
+	#return @return;
+	foreach (@return)
+	{
+	$self->create_object($type, %{$_});
+	}
+}
+
 sub load_from_db()
 {
 	my ($self, @types) = @_;
@@ -337,7 +353,7 @@ sub load_from_db()
                     servicedependency contact contactgroup timeperiod command);
     }
 	
-	my %objects = $self->{database}->get(@types);
+	my %objects = $self->{database}->get_from_db(@types);
 
 	foreach my $type (keys %objects)
 	{
