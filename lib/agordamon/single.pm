@@ -35,8 +35,9 @@ sub new {
 	return $self;
 }
 sub create_object() {
-	my ($self, $type, $object) = @_;
-
+	my ($self, $type, $obj) = @_;
+	
+	return $self->{db}->insert_entry($type, $obj);
 }
 
 sub get_object() {
@@ -62,7 +63,7 @@ sub get_object() {
 sub update_object() {
 	my ($self, $type, $obj) = @_;
 
-	return $self->{db}->update_entry($type, $obj)
+	return $self->{db}->update_entry($type, $obj);
 #FIXME add errorhandling
 }
 
