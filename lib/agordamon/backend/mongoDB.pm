@@ -85,7 +85,6 @@ sub get_from_db # FIXME rename to get_all_from_db
 					servicedependency contact contactgroup timeperiod command);
 	}
 	# if $query empty get all
-#TODO alles per return zurückgeben	
 	my %return;
 	foreach my $type (@types)
 	{
@@ -131,12 +130,13 @@ sub insert_entry
 {
 	my ($self, $type, $obj) = @_;
 	my $table;
-	my %ids; #what to do with this? into log?
 	$table = $self->{db}->$type; 
-    $ids{$type} = $table->insert(\%{$obj}, {safe => 1}) || print("write_mongodb(): ", $!);
+    return $table->insert(\%{$obj}, {safe => 1}) || print("write_mongodb(): ", $!);
+	
 # TODO errorhandling
 }
 
+#FIXME gehört das hier rein?
 sub write_db
 {
 	my ($self, $type, $if_exists, @objs) = @_;
