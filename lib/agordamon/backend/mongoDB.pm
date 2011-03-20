@@ -69,7 +69,6 @@ sub query_db
 	my $data = $table->find($query);
 	while (my $dat = $data->next)
 	{
-#		$self->create_object($type, %{$dat});
 		push(@return, $dat);
 	}
 	return @return;
