@@ -13,6 +13,9 @@ use agordamon::backend::mongoDB;
 use agordamon::host;
 use agordamon::service;
 use agordamon::contact;
+use agordamon::hostgroup;
+use agordamon::servicegroup;
+use agordamon::contactgroup;
 
 #FIXME fix list
 @EXPORT = qw();
@@ -43,6 +46,8 @@ sub create_object() {
 sub get_object() {
 	my ($self, $type, $query) = @_;
 
+	return undef if (!$query);
+
 	my @obj = $self->{db}->query_db($type, $query);
 	
 	my $object;
@@ -52,11 +57,14 @@ sub get_object() {
 			$object = agordamon::host->new(%params) if ($type eq "host");
 			$object = agordamon::service->new(%params) if ($type eq "service");
 			$object = agordamon::contact->new(%params) if ($type eq "contact");
+			$object = agordamon::hostgroup->new(%params) if ($type eq "hostgroup");
+			$object = agordamon::servicegroup->new(%params) if ($type eq "servicegroup");
+			$object = agordamon::contactgroup->new(%params) if ($type eq "contactgroup");
 
 			return $object->get_fields();
 
 	} else {
-		return -1;
+		return undef;
 	}
 }
 
