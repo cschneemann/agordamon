@@ -37,6 +37,8 @@ sub new {
 
 	return $self;
 }
+
+#FIXME rename to write_object?
 sub create_object() {
 	my ($self, $type, $obj) = @_;
 	
@@ -51,7 +53,7 @@ sub get_object() {
 	my @obj = $self->{db}->query_db($type, $query);
 	
 	my $object;
-	if (@obj)
+	if (@obj) #FIXME momentan workaround [erstes feld] zurückgeben, dafür sorgen dass eindeutiges ergebnis kommt
 	{
 			my %params = %{$obj[0]};
 			$object = agordamon::host->new(%params) if ($type eq "host");
@@ -66,6 +68,21 @@ sub get_object() {
 	} else {
 		return undef;
 	}
+}
+sub get_list() {
+	my ($self, $type, $query) = @_;
+
+	my @list = $self->{db}->query_db($type, $query);
+	my @return;
+#just find_one seems to be able to fetch only given fields, so we have to do it here by our own... #FIXME
+	if ($type eq "host")
+	{
+		foreach my $field (@list)
+		{
+			push(@return, { id => $field->{_id}->{value}, host_name => $field->{host_name} } );
+		}
+	}
+	return @return;
 }
 
 sub update_object() {
