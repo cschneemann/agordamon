@@ -77,11 +77,23 @@ sub get_list() {
 #just find_one seems to be able to fetch only given fields, so we have to do it here by our own... #FIXME
 	if ($type eq "host")
 	{
-		foreach my $field (@list)
-		{
-			push(@return, { id => $field->{_id}->{value}, host_name => $field->{host_name} } );
-		}
+		$field_name = "host_name";
+	} 
+	elsif ($type eq "service")
+	{
+		$field_name= "???"; #FIXME should be name in our layout?
+	} 
+	elsif ($type eq "contact")
+	{
+		$field_name = "contact_name";
+	}	
+
+
+	foreach my $field (@list)
+	{
+		push(@return, { id => $field->{_id}->{value}, $field_name => $field->{$field_name} } );
 	}
+
 	return @return;
 }
 
