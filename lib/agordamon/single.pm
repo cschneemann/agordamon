@@ -37,6 +37,11 @@ sub new {
 
 	return $self;
 }
+sub delete_obj() {
+	my ($self, $type, $query) = @_;
+
+	return $self->{db}->delete_obj_from_db($type, $query);
+}
 
 #FIXME rename to write_object?
 sub create_object() {
@@ -74,6 +79,7 @@ sub get_list() {
 
 	my @list = $self->{db}->query_db($type, $query);
 	my @return;
+	my $field_name;
 #just find_one seems to be able to fetch only given fields, so we have to do it here by our own... #FIXME
 	if ($type eq "host")
 	{

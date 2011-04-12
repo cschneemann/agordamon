@@ -74,7 +74,7 @@ sub query_db
 	return @return;
 }
 
-sub get_from_db # FIXME rename to get_all_from_db
+sub get_from_db #FIXME rename to get_all_from_db
 {
 	my ($self, @types) = @_;
 	if (!@types)

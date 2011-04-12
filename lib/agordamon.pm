@@ -10,7 +10,7 @@
 
 ## TODO:
 # make the internal data structure easier
-
+#FIXME move to agordamon::multi
 package agordamon;
 
 use agordamon::host;
@@ -33,7 +33,7 @@ use agordamon::timeperiod;
 @EXPORT = qw(add_srv2host, add_host, del_host, update_config2db, create_nagios_config);
 #@ISA = qw(agordamon::conffile);
 
-our $VERSION = "0.13";
+our $VERSION = "0.23";
 
 use strict;
 use warnings;
