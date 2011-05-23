@@ -29,7 +29,7 @@ sub get_valid_fields()
 							flap_detection_enabled flap_detection_options process_perf_data 
 							retain_status_information retain_nonstatus_information notification_interval 
 							first_notification_delay notification_period notification_options 
-							notifivations_enabled contacts contact_groups stalking_options notes 
+							notifications_enabled contacts contact_groups stalking_options notes 
 							notes_url action_url icom_image icon_image_alt);
 
     return @valid_fields;
