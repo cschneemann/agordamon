@@ -50,10 +50,10 @@ sub new {
 		$self->{database} = agordamon::backend::mongoDB->new( db_host => $params{db_host}, db_user => $params{db_user}, db_pass => $params{db_pass}, db_name => $params{db_name} );
 	} 
 	if ( $params{db_type} eq "mysql")
-	{
-		use agordamon::backend::MySQL;
-		$self->{database} = new agordamon::backend::MySQL( db_host => $params{db_host}, db_user => $params{db_user}, db_pass => $params{db_pass}, db_name => $params{db_name} );
-	}
+#	{
+#		use agordamon::backend::MySQL;
+#		$self->{database} = new agordamon::backend::MySQL( db_host => $params{db_host}, db_user => $params{db_user}, db_pass => $params{db_pass}, db_name => $params{db_name} );
+#	}
 	if ( $params{db_type} eq "files")
 	{
 		use agordamon::backend::Files;
