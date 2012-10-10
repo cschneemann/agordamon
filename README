@@ -1,4 +1,4 @@
-Agordamon is a configuration framework for monitoring solutions like Nagios(r) and Icinga written in Perl.
+Agordamon is a configuration module  for monitoring solutions like Nagios and Icinga written in Perl.
 
 It provides you with an easy to use functionality to create your configuration by script and offers the 
 possibility to do this automatically by evaluating your cmdb for example.
