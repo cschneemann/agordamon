@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 ## vim: set syn=on ts=4 sw=4 sts=0 noet foldmethod=indent:
-## purpose: 
+## purpose: do single requests against mongoDB for webinterface
 ## copyright: B1 Systems GmbH <info@b1-systems.de>, 2010.
 ## license: GPLv3+, http://www.gnu.org/licenses/gpl-3.0.html
-## author: Christian Schneemann <schneemann@b1-systems.de>, 2010.
+## author: Christian Schneemann <schneemann@b1-systems.de>, 2010-2012.
 
 
 
