@@ -21,146 +21,146 @@ use warnings;
 
 sub new {
 
-	my ( $pkg, %params) = @_;
-	my $self = {};
-#	$self->{db_type} = $params{db_type};
-	$self->{db_host} = $params{db_host};
-	$self->{db_user} = $params{db_user};
-	$self->{db_pass} = $params{db_pass};
-	$self->{db_name} = $params{db_name};
+  my ( $pkg, %params) = @_;
+  my $self = {};
+# $self->{db_type} = $params{db_type};
+  $self->{db_host} = $params{db_host};
+  $self->{db_user} = $params{db_user};
+  $self->{db_pass} = $params{db_pass};
+  $self->{db_name} = $params{db_name};
 
-	$self->{connection} = MongoDB::Connection->new(host => $self->{db_host});
-	$self->{db} = $self->{connection}->agordamon;
+  $self->{connection} = MongoDB::Connection->new(host => $self->{db_host});
+  $self->{db} = $self->{connection}->agordamon;
 
-	bless $self, $pkg;
-	return $self;
+  bless $self, $pkg;
+  return $self;
 }
 
 sub _exists()
 {
-	my ($self, $type, $name) = @_;
-	my $query = { name => $name };
-	if ( $self->query_db($type, $query) ) # .count? mit rueckgabe der anzahl, extra fehler wenn größer 1!
-	{
-		return 1;
-	} else {
-		return 0;
-	}
+  my ($self, $type, $name) = @_;
+  my $query = { name => $name };
+  if ( $self->query_db($type, $query) ) # .count? mit rueckgabe der anzahl, extra fehler wenn größer 1!
+  {
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
 sub delete_obj_from_db()
 {
-	my ($self, $type, $query) = @_;
-	my $table = $self->{db}->$type;
+  my ($self, $type, $query) = @_;
+  my $table = $self->{db}->$type;
 
-	my $d = $table->remove($query, {safe => 1});	
-	return $d;
-	
+  my $d = $table->remove($query, {safe => 1});  
+  return $d;
+  
 }
 
 sub query_db
 {
-	my ($self, $type, $query) = @_;
-	# if $query empty get all
-	my @return;
+  my ($self, $type, $query) = @_;
+  # if $query empty get all
+  my @return;
 
-	my $table = $self->{db}->$type;
-	
-	my $data = $table->find($query);
-	while (my $dat = $data->next)
-	{
-		push(@return, $dat);
-	}
-	return @return;
+  my $table = $self->{db}->$type;
+  
+  my $data = $table->find($query);
+  while (my $dat = $data->next)
+  {
+    push(@return, $dat);
+  }
+  return @return;
 }
 
 sub get_from_db #FIXME rename to get_all_from_db
 {
-	my ($self, @types) = @_;
-	if (!@types)
-	{
-		@types = qw( host hostgroup hostescalation hostextinfo hostdependency 
-					service servicegroup serviceescalation serviceextinfo 
-					servicedependency contact contactgroup timeperiod command);
-	}
-	# if $query empty get all
-	my %return;
-	foreach my $type (@types)
-	{
-		my @data = $self->query_db($type, "" );
-		foreach my $dat (@data )
-		{
-		#	$self->create_object($type, %{$dat});
-			push(@{$return{$type}}, $dat);
-		}
-#		@{$return->$type} = @data;
-	}
-	return %return;
+  my ($self, @types) = @_;
+  if (!@types)
+  {
+    @types = qw( host hostgroup hostescalation hostextinfo hostdependency 
+                 service servicegroup serviceescalation serviceextinfo 
+                 servicedependency contact contactgroup timeperiod command);
+  }
+  # if $query empty get all
+  my %return;
+  foreach my $type (@types)
+  {
+    my @data = $self->query_db($type, "" );
+    foreach my $dat (@data )
+    {
+    # $self->create_object($type, %{$dat});
+      push(@{$return{$type}}, $dat);
+    }
+#   @{$return->$type} = @data;
+  }
+  return %return;
 }
 
 sub update_db
 {
-	my ($self, $type, @objs) = @_;
+  my ($self, $type, @objs) = @_;
 
 }
 sub update_entry
 {
-	my ($self, $type, $obj) = @_;
-	my $table;
-	$table = $self->{db}->$type;
-	my $criteria = { name => $obj->{name} };
-	my $r = $table->update($criteria, { '$set' => $obj }, { safe => 1});
-	return $r;
+  my ($self, $type, $obj) = @_;
+  my $table;
+  $table = $self->{db}->$type;
+  my $criteria = { name => $obj->{name} };
+  my $r = $table->update($criteria, { '$set' => $obj }, { safe => 1});
+  return $r;
 }
 
 sub overwrite_entry
 {
-	my ($self, $type, $obj) =@_;
-	my $table;
-	$table = $self->{db}->$type; 
-	my $name = $obj->{name};
-	my $query = { name => $name };
-	my $r = $self->delete_obj_from_db($type, $query);
+  my ($self, $type, $obj) =@_;
+  my $table;
+  $table = $self->{db}->$type; 
+  my $name = $obj->{name};
+  my $query = { name => $name };
+  my $r = $self->delete_obj_from_db($type, $query);
 
-	$self->insert_entry($type, $obj) if $r;
+  $self->insert_entry($type, $obj) if $r;
 
 }
 sub insert_entry
 {
-	my ($self, $type, $obj) = @_;
-	my $table;
-	$table = $self->{db}->$type; 
+  my ($self, $type, $obj) = @_;
+  my $table;
+  $table = $self->{db}->$type; 
     return $table->insert(\%{$obj}, {safe => 1}) || print("write_mongodb(): ", $!);
-	
+  
 # TODO errorhandling
 }
 
 #FIXME gehört das hier rein?
 sub write_db
 {
-	my ($self, $type, $if_exists, @objs) = @_;
+  my ($self, $type, $if_exists, @objs) = @_;
 
-	my $table;
-	my %ids;
-	$table = $self->{db}->$type;	# check if object already exists.. possible with batch_insert?
-	foreach my $obj (@objs)
-	{
-		if ( $self->_exists($type, $obj->{name} ) == 0 ) 
-		{
-			$self->insert_entry($type, $obj);
-		} else { 
-			if ($if_exists =~ /^update$/)
-			{
-				#update entry, untouched values will be untouched!
-				$self->update_entry($type, $obj);
-			} elsif ($if_exists =~ /^overwrite$/)
-			{
-				# overwrite entry (delete and write new one)
-				$self->overwrite_entry($type, $obj);
-			}
-		}
-	}
-	# FIXME TODO zurückgeben was geschrieben wurde, was nicht, was vorhanden war....
+  my $table;
+  my %ids;
+  $table = $self->{db}->$type;  # check if object already exists.. possible with batch_insert?
+  foreach my $obj (@objs)
+  {
+    if ( $self->_exists($type, $obj->{name} ) == 0 ) 
+    {
+      $self->insert_entry($type, $obj);
+    } else { 
+      if ($if_exists =~ /^update$/)
+      {
+        #update entry, untouched values will be untouched!
+        $self->update_entry($type, $obj);
+      } elsif ($if_exists =~ /^overwrite$/)
+      {
+        # overwrite entry (delete and write new one)
+        $self->overwrite_entry($type, $obj);
+      }
+    }
+  }
+  # FIXME TODO zurückgeben was geschrieben wurde, was nicht, was vorhanden war....
 }
 
 

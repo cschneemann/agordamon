@@ -20,22 +20,22 @@ use warnings;
 # get_valid_fields in unusable at the moment due to the complexity of possibilities.....
 sub get_valid_fields()
 {   
-    my ($self, $field) = @_;
-	my @valid_fields = qw(use name register exclude timeperiod_namemonday tuesday 
-						wednesday thursday friday saturday sunday);
+  my ($self, $field) = @_;
+  my @valid_fields = qw(use name register exclude timeperiod_namemonday tuesday 
+                        wednesday thursday friday saturday sunday);
 
-    return @valid_fields;
+  return @valid_fields;
 }
 
 #sub valid_field($)
 #{
-#	my ($self) = @_;
-#	return 1;
+# my ($self) = @_;
+# return 1;
 #}
 
 sub get_type()
 {
-        my ($self) = @_;
-        return "timeperiod";
+  my ($self) = @_;
+  return "timeperiod";
 }
 

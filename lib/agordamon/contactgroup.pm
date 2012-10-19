@@ -20,15 +20,15 @@ use strict;
 use warnings;
 sub get_valid_fields()
 {   
-    my ($self, $field) = @_;
-	my @valid_fields = qw(use register name contactgroup_name alias members contactgroup_members);
+  my ($self, $field) = @_;
+  my @valid_fields = qw(use register name contactgroup_name alias members contactgroup_members);
 
-    return @valid_fields;
+  return @valid_fields;
 }
 
 sub get_type()
 {
-        my ($self) = @_;
-        return "contactgroup";
+  my ($self) = @_;
+  return "contactgroup";
 }
 

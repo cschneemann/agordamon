@@ -20,27 +20,27 @@ use strict;
 use warnings;
 sub get_valid_fields()
 {   
-    my ($self, $field) = @_;
-	my @valid_fields = qw(use name register servicegroup_name alias members servicegroup_members 
-						notes notes_url action_url );
+  my ($self, $field) = @_;
+  my @valid_fields = qw(use name register servicegroup_name alias members servicegroup_members 
+                        notes notes_url action_url );
 
-    return @valid_fields;
+  return @valid_fields;
 }
 
 sub add_member
 {
-    my ($self, $member) = @_;
-	if (defined($self->get_field("members")))
-	{
-	    $self->set_field("members", $self->{"members"}.", ".$member);
-	} else {
-	    $self->set_field("members", $member);
-	}
+  my ($self, $member) = @_;
+  if (defined($self->get_field("members")))
+  {
+    $self->set_field("members", $self->{"members"}.", ".$member);
+  } else {
+    $self->set_field("members", $member);
+  }
 }
 
 sub get_type()
 {
-        my ($self) = @_;
-        return "servicegroup";
+  my ($self) = @_;
+  return "servicegroup";
 }
 

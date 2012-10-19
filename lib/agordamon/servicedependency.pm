@@ -20,19 +20,19 @@ use strict;
 use warnings;
 sub get_valid_fields()
 {   
-    my ($self, $field) = @_;
-	my @valid_fields = qw(use name dependent_host_name dependent_hostgroup_name 
-							dependent_service_description host_name 
-							hostgroup_name service_description inherits_parents 
-							execution_failure_criteria notification_failure_criteria 
-							dependency_period);
+  my ($self, $field) = @_;
+  my @valid_fields = qw(use name dependent_host_name dependent_hostgroup_name 
+                        dependent_service_description host_name 
+                        hostgroup_name service_description inherits_parents 
+                        execution_failure_criteria notification_failure_criteria 
+                        dependency_period);
 
-    return @valid_fields;
+  return @valid_fields;
 }
 
 sub get_type()
 {
-        my ($self) = @_;
-        return "servicedependency";
+  my ($self) = @_;
+  return "servicedependency";
 }
 

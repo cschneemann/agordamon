@@ -27,106 +27,105 @@ sub get_field($);
 
 sub new {
 
-	my ( $pkg, %params) = @_;
-	my $self = {};
-	bless $self, $pkg;
+  my ( $pkg, %params) = @_;
+  my $self = {};
+  bless $self, $pkg;
 
-	foreach my $param (keys %params)
-	{
-		if ($self->valid_field($param))
-		{
-			$self->{$param} = $params{$param};
-		}
-	}
-	if (! $self->get_field("name") )
-	{
-		$self->{"name"} = $self->{$self->get_type()."_name"}; #TODO change to set_field()?
-	}
-	return $self;
+  foreach my $param (keys %params)
+  {
+    if ($self->valid_field($param))
+    {
+      $self->{$param} = $params{$param};
+    }
+  }
+  if (! $self->get_field("name") )
+  {
+    $self->{"name"} = $self->{$self->get_type()."_name"}; #TODO change to set_field()?
+  }
+  return $self;
 }
 
 sub delete_field($)
 {
-	my ($self, $field) = @_;
-	delete $self->{$field};
+  my ($self, $field) = @_;
+  delete $self->{$field};
 
-	return 0;
+  return 0;
 }
 
 sub set_field($$)
 {
-	my ($self, $field, $data) = @_;
-	if ($self->valid_field($field))
-	{
-		$self->{$field} = $data;
-	}
+  my ($self, $field, $data) = @_;
+  if ($self->valid_field($field))
+  {
+    $self->{$field} = $data;
+  }
 }
 
 sub get_field($)
 {
-	my ($self, $field) = @_;
+  my ($self, $field) = @_;
 
-	if (exists($self->{$field}))
-	{
-		return $self->{$field};
-	} else {
-		return undef;
-	}
+  if (exists($self->{$field}))
+  {
+    return $self->{$field};
+  } else {
+    return undef;
+  }
 }
 
 sub get_fields($)
 {
-	my ($self) = @_;
-	my %return;
-	foreach my $field ($self->get_valid_fields())
-	{
-		$return{$field} = $self->get_field($field) if ( defined($self->get_field($field)));
-	}
-	return %return;
+  my ($self) = @_;
+  my %return;
+  foreach my $field ($self->get_valid_fields())
+  {
+    $return{$field} = $self->get_field($field) if ( defined($self->get_field($field)));
+  }
+  return %return;
 }
 
 sub get_valid_fields()
 {
-	my ($self, $field) = @_;
-	my @valid_fields = qw();
+  my ($self, $field) = @_;
+  my @valid_fields = qw();
 
-	return @valid_fields;
+  return @valid_fields;
 }
 
 sub valid_field($)
 {
-	my ($self, $field) = @_;
-	my @valid_fields = $self->get_valid_fields();
-	if (grep(/^$field$/, @valid_fields))
-	{
-		return 1;
-	} else {
-		return 0;
-	}
+  my ($self, $field) = @_;
+  my @valid_fields = $self->get_valid_fields();
+  if (grep(/^$field$/, @valid_fields))
+  {
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
 sub get_type()
 {
-	my ($self) = @_;
-	return "notset";
+  my ($self) = @_;
+  return "notset";
 }
 
 sub create_config($)
 {
-	my ($self, $type) = @_;	
-	my $config;
+  my ($self, $type) = @_; 
+  my $config;
 
-	$config = "define $type";
-	$config = $config."{\n";
-	foreach my $field ( $self->get_valid_fields())
-	{
-		if ( defined( $self->get_field($field) ) )
-		{
-			$config = $config."\t $field \t ".$self->get_field($field)."\n" ;
-		}
-	}
-	$config = $config."}\n\n";
-	return $config;	
+  $config = "define $type";
+  $config = $config."{\n";
+  foreach my $field ( $self->get_valid_fields())
+  {
+    if ( defined( $self->get_field($field) ) )
+    {
+      $config = $config."\t $field \t ".$self->get_field($field)."\n" ;
+    }
+  }
+  $config = $config."}\n\n";
+  return $config; 
 }
-
 

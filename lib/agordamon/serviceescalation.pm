@@ -20,19 +20,19 @@ use strict;
 use warnings;
 sub get_valid_fields()
 {   
-    my ($self, $field) = @_;
-	my @valid_fields = qw(use name register host_name hostgroup_name 
-						service_description contacts contact_groups 
-						first_notification last_notification 
-						notification_interval escalation_period 
-						escalation_options);
+  my ($self, $field) = @_;
+  my @valid_fields = qw(use name register host_name hostgroup_name 
+                        service_description contacts contact_groups 
+                        first_notification last_notification 
+                        notification_interval escalation_period 
+                        escalation_options);
 
-    return @valid_fields;
+  return @valid_fields;
 }
 
 sub get_type()
 {
-        my ($self) = @_;
-        return "serviceescalation";
+  my ($self) = @_;
+  return "serviceescalation";
 }
 

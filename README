@@ -1,4 +1,4 @@
-Agordamon is a configuration module  for monitoring solutions like Nagios and Icinga written in Perl.
+Agordamon is a configuration module for monitoring solutions like Nagios and Icinga written in Perl.
 
 It provides you with an easy to use functionality to create your configuration by script and offers the 
 possibility to do this automatically by evaluating your cmdb for example.
@@ -8,6 +8,6 @@ it can store the objects in a database.
 Saving it to a databese provides you with the functionality to edit the objects by webpage or commandline 
 client.
 
-At the moment agordamon supports MongoDB as database backend, further backends such are planned.
+At the moment agordamon supports MongoDB as database backend, further backends are planned.
 
 

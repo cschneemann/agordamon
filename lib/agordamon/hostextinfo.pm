@@ -20,18 +20,18 @@ use strict;
 use warnings;
 sub get_valid_fields()
 {   
-    my ($self, $field) = @_;
-	my @valid_fields = qw(use name register host_name notes 
-						notes_url action_url icon_image 
-						icon_image_alt vrml_image statusmap_image 
-						2d_coords 3d_coords);
+  my ($self, $field) = @_;
+  my @valid_fields = qw(use name register host_name notes
+                        notes_url action_url icon_image
+                        icon_image_alt vrml_image statusmap_image
+                        2d_coords 3d_coords);
 
-    return @valid_fields;
+  return @valid_fields;
 }
 
 sub get_type()
 {
-        my ($self) = @_;
-        return "hostextinfo";
+  my ($self) = @_;
+  return "hostextinfo";
 }
 

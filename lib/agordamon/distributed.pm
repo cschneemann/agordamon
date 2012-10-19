@@ -19,11 +19,11 @@ use warnings;
 
 sub new {
 
-	my ( $pkg, %params) = @_;
-	my $self = {};
+  my ( $pkg, %params) = @_;
+  my $self = {};
 
-	bless $self, $pkg;
-	return $self;
+  bless $self, $pkg;
+  return $self;
 }
 
 # main files

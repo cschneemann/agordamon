@@ -20,22 +20,22 @@ use strict;
 use warnings;
 sub get_valid_fields()
 {   
-    my ($self, $field) = @_;
-	my @valid_fields = qw(use register name contact_name alias 
-				contactgroups host_notifications_enabled 
-				service_notifications_enabled host_notification_period 
-				service_notification_period host_notification_options 
-				service_notification_options service_notification_commands 
-				host_notification_commands email pager can_submit_commands 
-				retain_status_information retain_nonstatus_information 
-				address1 address2 address3 address4	address5 address6);
+  my ($self, $field) = @_;
+  my @valid_fields = qw(use register name contact_name alias 
+        contactgroups host_notifications_enabled 
+        service_notifications_enabled host_notification_period 
+        service_notification_period host_notification_options 
+        service_notification_options service_notification_commands 
+        host_notification_commands email pager can_submit_commands 
+        retain_status_information retain_nonstatus_information 
+        address1 address2 address3 address4 address5 address6);
 
-    return @valid_fields;
+  return @valid_fields;
 }
 
 sub get_type()
 {
-        my ($self) = @_;
-        return "contact";
+  my ($self) = @_;
+  return "contact";
 }
 

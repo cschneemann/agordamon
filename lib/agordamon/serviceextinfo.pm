@@ -20,17 +20,16 @@ use strict;
 use warnings;
 sub get_valid_fields()
 {   
-    my ($self, $field) = @_;
-	my @valid_fields = qw(use name register host_name service_description 
-						notes notes_url action_url icon_image 
-						icon_image_alt);
+  my ($self, $field) = @_;
+  my @valid_fields = qw(use name register host_name service_description 
+                        notes notes_url action_url icon_image icon_image_alt);
 
-    return @valid_fields;
+  return @valid_fields;
 }
 
 sub get_type()
 {
-        my ($self) = @_;
-        return "serviceextinfo";
+  my ($self) = @_;
+  return "serviceextinfo";
 }
 

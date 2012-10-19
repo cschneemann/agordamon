@@ -20,17 +20,17 @@ use strict;
 use warnings;
 sub get_valid_fields()
 {   
-    my ($self, $field) = @_;
-	my @valid_fields = qw(use name register hostgroup_name alias 
-						members hostgroup_members notes notes_url 
-						action_url );
+  my ($self, $field) = @_;
+  my @valid_fields = qw(use name register hostgroup_name alias
+                        members hostgroup_members notes notes_url
+                        action_url );
 
-    return @valid_fields;
+  return @valid_fields;
 }
 
 sub add_member
 {
-	my ($self, $member) = @_;
+  my ($self, $member) = @_;
     if (defined($self->get_field("members")))
     {
         $self->set_field("members", $self->{"members"}.", ".$member);
@@ -41,7 +41,7 @@ sub add_member
 
 sub get_type()
 {
-        my ($self) = @_;
-        return "hostgroup";
+  my ($self) = @_;
+  return "hostgroup";
 }
 

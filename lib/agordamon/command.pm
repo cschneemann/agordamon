@@ -20,15 +20,15 @@ use strict;
 use warnings;
 sub get_valid_fields()
 {   
-    my ($self, $field) = @_;
-	my @valid_fields = qw(name command_name command_line);
+  my ($self, $field) = @_;
+  my @valid_fields = qw(name command_name command_line);
 
-    return @valid_fields;
+  return @valid_fields;
 }
 
 sub get_type()
 {
-        my ($self) = @_;
-        return "command";
+  my ($self) = @_;
+  return "command";
 }
 
