@@ -101,6 +101,11 @@ sub valid_field($)
   {
     return 1;
   } else {
+    #check for custom object variable
+    if ( $field =~ /^_/ && $field !~ /\s/ )
+    {
+      return 1;
+    }
     return 0;
   }
 }
