@@ -30,7 +30,7 @@ use agordamon::timeperiod;
 
 #use agordamon::conffile;
 
-@EXPORT = qw(add_srv2host, add_host, del_host, update_config2db, create_nagios_config);
+@EXPORT = qw(add_srv2host, add_host, del_host, update_config2db, create_config);
 #@ISA = qw(agordamon::conffile);
 
 our $VERSION = "0.23";
@@ -70,7 +70,7 @@ sub add_srv2host($$);
 sub add_host($\%\%);
 sub del_host($);
 sub update_config2db($);
-sub create_nagios_config($);
+sub create_config($);
 sub is_valid($$);
 
 sub set()
