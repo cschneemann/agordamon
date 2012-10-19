@@ -1,3 +1,427 @@
-23:43	18.09.2010
+commit 5a8c25b1b8483e3c43058ec9eb6b7a37fab7c1b3
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Fri Oct 19 17:10:03 2012 +0200
 
-Migration from svn to git.b1-systems.de. Release of first code in alpha state. 
+    reformated tabs2spaces
+    
+    ts=2
+
+commit 6da6a50fa3622891775ae89ff7aec81af4adb68a
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Fri Oct 19 17:07:34 2012 +0200
+
+    reformated tabs to spaces
+    
+    ts=2
+
+commit 5f2f1924ac505856027f88d286faf35d74f76c8b
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Fri Oct 19 16:35:23 2012 +0200
+
+    retabbed
+    
+    ts=2
+
+commit d1aaf70323fd9bf1727b1d6d8c63a87d539ed42d
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Fri Oct 19 15:53:32 2012 +0200
+
+    reformated code - no functionality
+
+commit cfbe7844aa48742081118804fe7495434eedb1a1
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Fri Oct 19 15:51:06 2012 +0200
+
+    remove MySQL "support"
+    
+    remove support for MySQL as it was not correctly implemented
+
+commit 5c8bbcbb8ca0cd2b7e4b9e5695fc4442dcbf6ace
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Fri Oct 19 15:45:19 2012 +0200
+
+    renamed create_nagios_config to create_config
+
+commit 3c2570a7f7335c4b14a3f072507cb68fdf64d84f
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Wed Oct 10 18:37:51 2012 +0200
+
+    small wordchange
+
+commit 66f07c72c79c22baeacfbee53406dcf66aa84d19
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Wed Feb 29 16:51:59 2012 +0100
+
+    commented the mysql part, need more work on that
+
+commit 9e9d81267f97a060d0b31e94d13a139ca6d4d937
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Mon May 23 11:37:09 2011 +0200
+
+    commented out mysql backend, it does not exist yet
+
+commit f6e24cb9dab95524a76aab5f8e5eb417b7648c1d
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Mon May 23 10:19:52 2011 +0200
+
+    fixed typo
+
+commit d6ffb45e3f7859c9b52908c3c22c57a74073a5e8
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Tue Apr 12 10:24:00 2011 +0200
+
+    functions to delete/list objects
+
+commit 32f752936eb1c8e784c9d39b0c7d351f55eca706
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Wed Apr 6 22:45:41 2011 +0200
+
+    added more object types (not all yet)
+
+commit 832244a05f0e26ca62cb49aac8274f96d3739264
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Wed Apr 6 22:33:41 2011 +0200
+
+    added function get_list to get all objects of one type
+    	returns _id and name
+
+commit c877d0c30404c2f3c8d42da4069a7e56802f49a9
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Mar 20 16:59:50 2011 +0100
+
+    added *group functionality
+
+commit 96d5c77722273e6c0be32ef90f97593fa13b33e6
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Mar 20 16:59:12 2011 +0100
+
+    cleaned code
+
+commit e015199f0b9f8a862d920f0f975ac31747aaaa82
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sat Mar 19 21:19:48 2011 +0100
+
+    removed/renamed into single.pm
+
+commit a8f1da497ff6f394c9c6cb0c36813f364602a50b
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sat Mar 19 21:19:17 2011 +0100
+
+    added function to create an object
+
+commit 7a4b5924af2217df6933de14336c85ef643b76a2
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sat Mar 19 21:18:27 2011 +0100
+
+    cleaned source a bit
+
+commit 4cbb9118ff6501eb272cf20c801b16195b444fb4
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Thu Mar 10 22:05:51 2011 +0100
+
+    renamed 4web to single
+
+commit 6bbb93f4c9a085fed353c983fd60bcd0d4bd56cc
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Thu Mar 10 22:05:26 2011 +0100
+
+    renamed 4web to single
+
+commit 373b780e606b8545dc883faf77f39a2a97e424c8
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Mon Mar 7 18:48:00 2011 +0100
+
+    changed $types to $type, new internal structure
+    adding objects to groups/groups to objects now works again :)
+
+commit c2560c26e1dc679ab14db69c3cf6660b51161eff
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Mar 6 17:43:33 2011 +0100
+
+    reformated file
+
+commit 8c46de1b3e82df76aae4606fca10a3862bb1dca3
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Mar 6 17:42:29 2011 +0100
+
+    changed names of documents
+
+commit a0d85ff0fc4d39a1912c16c5b66578244d168cdb
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Mar 6 17:41:55 2011 +0100
+
+    added 4web.pm
+
+commit 925dfe4e000365e4ea224c002fca6040dc75f10b
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Mar 6 17:40:43 2011 +0100
+
+    created new package for use with agordamonweb
+
+commit 59d04170ed64cd348e95572120f036e03dcf6360
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Mon Feb 7 22:33:17 2011 +0100
+
+    function to get objects for valid query...
+    
+    possible to get members of *group, host with defined host_name...
+
+commit 6079fb0125b118630c586cee31a573321250b414
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Thu Feb 3 23:17:15 2011 +0100
+
+    cleaned comments
+
+commit 0747a57fa28afd5f7afe179f708fe8ef3897f6eb
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Thu Feb 3 23:14:34 2011 +0100
+
+    rm
+
+commit cbcb62a49b5a8f7782d27d4d6378d9abe6e08ac2
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Thu Feb 3 23:12:25 2011 +0100
+
+    renamed..
+
+commit 61f3b9a3a6a594e6e67dda8e51670090bffb4344
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Thu Feb 3 23:11:47 2011 +0100
+
+    not needed anymore
+
+commit 40a8a2a4ea46cd7538b762b2748a4b88038d2e68
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Thu Feb 3 22:57:42 2011 +0100
+
+    added forgetten host_notification_commands option
+
+commit 5b91118d701c2b8b0c380ef8068a51501eb6fbf6
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Thu Feb 3 22:56:55 2011 +0100
+
+    changed functionnames to be more general even if no real databese is used..
+
+commit 9d8ee98b8278646dc9932feff3a9e732c7d01949
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Thu Feb 3 22:55:29 2011 +0100
+
+    changed internal structure to use singular of typenames,
+    makes everything easier ;)
+
+commit af516b6eae9f46987cfa4723c737593025983e3d
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Thu Feb 3 22:52:53 2011 +0100
+
+    new module for parsing configuration files
+
+commit 6dd588a62c891266bef0c73a531f12795f8be447
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Thu Feb 3 22:52:23 2011 +0100
+
+    new module to read in configuration files (except timeperiods!!)
+
+commit d6a567c1243edf0b68cfde7d919d03bcc211d0fa
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Thu Feb 3 18:42:52 2011 +0100
+
+    fixed problem if @types is empty/undefined..
+
+commit dd21fc28605fbca7a457ec4aa1ac6efdf64e6457
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Wed Feb 2 21:04:33 2011 +0100
+
+    added function to parse nagios.cfg for cfg_file/cfg_dir and read in all configs
+
+commit 3e948e83aaddd9a15fbee4cf2d72f5c6c86d9a17
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Tue Jan 18 21:45:15 2011 +0100
+
+    removed unneeded file
+
+commit 9200047eb5612dc97f29416e84de8dc9cfd0c7d7
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Tue Jan 18 21:43:04 2011 +0100
+
+    unneeded file
+
+commit ae767f4c59446fe42392e274d2ea8b13b180b17a
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Tue Jan 18 20:11:16 2011 +0100
+
+    using more available functions
+
+commit 5c9b0f865670f72e413bb4ebb68a1d9f43160ee2
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Tue Jan 18 20:10:21 2011 +0100
+
+    now with update/overwrite functions
+
+commit 59d85d80c16339a98a4e0d090ac764c3d13f9a46
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Wed Jan 12 21:04:07 2011 +0100
+
+    now able to delete from objects too
+
+commit fc7600c5b06e9b64e315232c7e34e337066c9d89
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Tue Jan 11 22:34:06 2011 +0100
+
+    support for deletions from mongoDB
+
+commit 9e0d9b5d2973e64addb10f7d0b3c1d0631ef455b
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Tue Jan 11 22:32:24 2011 +0100
+
+    - added functionality to delete from DB
+    
+    - deletion from objects directly is tricky if more than one entry has to be deleted
+    (at least with the used object-structure)
+
+commit 705dcf62be22d041d24eacb4ba1fc151194d373b
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Jan 2 22:49:42 2011 +0100
+
+    simplified connection to database
+
+commit 4149711ccdd4bc2c9906a983ed178ecd5d04a8ac
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Jan 2 22:10:36 2011 +0100
+
+    preparationes becdause backend changes, now more flexibile
+
+commit 2a864f9e9b4c6ec07ddda0b5445baa5ca7c5628a
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Jan 2 22:09:53 2011 +0100
+
+    small changes in usage of internal functions
+
+commit 91d9d7dc5e82f2324ebd1ff9d3b4358dea42dea1
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Jan 2 22:08:59 2011 +0100
+
+    outsourced database handling into separate files to be more flexible
+    started with mongodb
+
+commit 8495c72db38641d02d711aee1dbaee1d2c085df1
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Jan 2 22:08:00 2011 +0100
+
+    adjusted Manifest because changed backend handling
+
+commit aff5764a9a7f2330e213c12409cdeffcd2f06cea
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sat Dec 25 16:48:24 2010 +0100
+
+    export database related functions from main file into separate modules
+
+commit 65024c05b419d085c091fac162c540d18c304fc7
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sat Dec 25 16:47:05 2010 +0100
+
+    export database related functions from main file into separate modules
+
+commit 077399c01e9deafc271cf07bf55cb8c01e0c4e8d
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sat Dec 25 16:46:16 2010 +0100
+
+    export database related functions from main file into separate modules
+
+commit 1837a1d20a47720e0c1a3e6865470d1030d64d6a
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Dec 5 01:04:47 2010 +0100
+
+    documented delete_object function
+
+commit fd4fbce61fa5a2868a70ac298aca63b3dca3b454
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Dec 5 01:03:47 2010 +0100
+
+    added functions to:
+    - delete object from structure (from db will follow)
+    - get arrayposition of an element by name
+
+commit c05f8d0f16d11346003de3bde3700b194f1fcb7e
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Dec 5 01:03:08 2010 +0100
+
+    set parameter name if not set, use $type_name for that
+
+commit 5526f17584677e5acf808a589840e3c9931b0849
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Dec 5 01:02:36 2010 +0100
+
+    cleaned spaces
+
+commit 57eea7a6851d95e576553ac446dda40ec3c12502
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sun Dec 5 01:01:59 2010 +0100
+
+    added name to parameterlist
+
+commit fdce5d9fd099b2e25f1905dfbae1d09987572572
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sat Dec 4 23:42:36 2010 +0100
+
+    documented new parameter that has to be set because used internal
+
+commit d43d381ff83a21673525694e3f4a411fe0472593
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Wed Dec 1 22:22:58 2010 +0100
+
+    filled README with text
+
+commit 62b5c68b26f429fb3ca56e2160631ee8b77a87e9
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Wed Dec 1 21:15:30 2010 +0100
+
+    added "name" and/or "use" to objects
+
+commit f96647e7adee0ee7fc8e9eaa1060d68293bf3898
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Wed Dec 1 21:09:57 2010 +0100
+
+    cleaned up some unneded functions
+
+commit 9be71e951cbbcb1fa87079a34c5de6ec1e69efb6
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Wed Dec 1 21:09:36 2010 +0100
+
+    started with documentation of available functions
+
+commit 9150fa4a4d67d29c3ef4d9d652078929c7fd46f9
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Tue Nov 9 22:03:56 2010 +0100
+
+    get set fields of an object
+
+commit 7bd2c893b1b47dbed0c71decb7efa38d5e2d1ffe
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Tue Nov 9 22:03:31 2010 +0100
+
+    get information back from mongoDB after insert
+
+commit f5ef1e39d9b8e73aaad18529798c21777bbe4998
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Tue Nov 9 08:18:50 2010 +0100
+
+    changed to single function for creating objects
+
+commit e866201d5c62de0993bca0238293eee166a5541b
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Wed Nov 3 22:52:57 2010 +0100
+
+    check if objects-array is not empty before try to write it into db
+
+commit e9c252e7628107283f970265bdde54cc28dc9396
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Wed Nov 3 22:06:53 2010 +0100
+
+    changed create_<type> functions into create_object($type, ...) function
+    added mongodb support (write)
+
+commit 40c53316a632a6f155d464e9666874f77fbed73e
+Author: Christian Schneemann <schneemann@b1-systems.de>
+Date:   Sat Oct 30 16:36:47 2010 +0200
+
+    initial commit of new monitoring configuration framework agordamon
