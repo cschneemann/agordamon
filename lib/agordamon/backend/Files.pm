@@ -99,12 +99,13 @@ sub get
           $object{$key} = $value;
         }
 
-      if ($file[$i] =~ /}/)
-      {
-        $definition = 0;
-        push(@{$return{$type}}, \%object) if (scalar(grep($type, @types)) && $type ne "timeperiod");
+        if ($file[$i] =~ /\}/)
+        {
+          $definition = 0;
+          push(@{$return{$type}}, \%object) if (scalar(grep($type, @types)) && $type ne "timeperiod");
+        }
+        $i++;
       }
-      $i++;
     }
   }
 
