@@ -21,8 +21,8 @@ use warnings;
 sub get_valid_fields()
 {   
   my ($self, $field) = @_;
-  my @valid_fields = qw(use name register exclude timeperiod_name monday tuesday 
-                        wednesday thursday friday saturday sunday);
+  my @valid_fields = qw(use name alias register exclude timeperiod_name monday
+                        tuesday wednesday thursday friday saturday sunday);
 
   return @valid_fields;
 }
