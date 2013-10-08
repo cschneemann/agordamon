@@ -30,7 +30,8 @@ sub get_valid_fields()
                         retain_status_information retain_nonstatus_information notification_interval 
                         first_notification_delay notification_period notification_options 
                         notifications_enabled contacts contact_groups stalking_options notes 
-                        notes_url action_url icom_image icon_image_alt parallelize_check);
+                        notes_url action_url icom_image icon_image_alt parallelize_check
+                        failure_prediction_enabled retry_check_interval normal_check_interval);
 
   return @valid_fields;
 }

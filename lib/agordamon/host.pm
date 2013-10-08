@@ -33,7 +33,7 @@ sub get_valid_fields()
                        contacts contact_groups notification_interval first_notification_delay
                        notification_period notification_options notifications_enabled
                        stalking_options notes notes_url action_url icom_image icon_image_alt
-                       vrml_image statusmap_image 2d_coords 3d_coords );
+                       vrml_image statusmap_image 2d_coords 3d_coords failure_prediction_enabled);
 
   return @valid_fields;
 }
