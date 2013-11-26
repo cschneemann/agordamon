@@ -5,7 +5,7 @@ possibility to do this automatically by evaluating your cmdb for example.
 
 Agordamon can be used as a "one-shot" mechanism and writes your objects directly to your filesystem or 
 it can store the objects in a database.
-Saving it to a databese provides you with the functionality to edit the objects by webpage or commandline 
+Saving it to a database provides you with the functionality to edit the objects by webpage or commandline 
 client.
 
 At the moment agordamon supports MongoDB as database backend, further backends are planned.
