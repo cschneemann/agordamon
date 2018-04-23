@@ -22,8 +22,8 @@ Release:        0
 Summary:        Agordamon Perl module
 License:        GPLv3
 Group:          Development/Libraries/Perl
-Url:            http://search.cpan.org/dist/Nmap-Parser/
-Source:         agordamon-%{version}.tar.gz
+Url:            http://www.b1-systems.de
+Source:         agordamon-%{version}.tar.xz
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  perl
